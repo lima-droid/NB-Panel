@@ -1,10 +1,10 @@
 services:
   # NodePass 应用
-  nodepassdash:
+  nb-panel:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: nodepassdash
+    container_name: nb-panel
     ports:
       - "4000:3000"
     # environment:

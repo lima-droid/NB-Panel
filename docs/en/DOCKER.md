@@ -1,6 +1,6 @@
-# Docker Deployment (NodePassDash)
+# Docker Deployment (NB-Panel)
 
-This guide deploys NodePassDash using Docker. NodePassDash runs as a **single container** (Go API + embedded Web UI) on **one port** (default `3000`).
+This guide deploys NB-Panel using Docker. NB-Panel runs as a **single container** (Go API + embedded Web UI) on **one port** (default `3000`).
 
 ## Requirements
 
@@ -12,7 +12,7 @@ This guide deploys NodePassDash using Docker. NodePassDash runs as a **single co
 1) Create a working directory and prepare volumes:
 
 ```bash
-mkdir -p nodepassdash && cd nodepassdash
+mkdir -p nb-panel && cd nb-panel
 mkdir -p db logs
 ```
 
@@ -20,9 +20,9 @@ mkdir -p db logs
 
 ```yaml
 services:
-  nodepassdash:
-    image: ghcr.io/nodepassproject/nodepassdash:latest
-    container_name: nodepassdash
+  nb-panel:
+    image: ghcr.io/nodepassproject/nb-panel:latest
+    container_name: nb-panel
     ports:
       - "3000:3000"
     volumes:
@@ -45,10 +45,10 @@ docker compose up -d
 
 ## First Login / Initial Credentials
 
-On first start, NodePassDash initializes the database and prints the initial admin credentials in logs.
+On first start, NB-Panel initializes the database and prints the initial admin credentials in logs.
 
 ```bash
-docker logs nodepassdash | grep -E \"initialized|username|password|初始化完成|用户名|密码\" -n || docker logs nodepassdash
+docker logs nb-panel | grep -E \"initialized|username|password|初始化完成|用户名|密码\" -n || docker logs nb-panel
 ```
 
 After logging in, change the password in the UI.
@@ -60,7 +60,7 @@ You can pass configuration either as CLI flags (recommended) or via environment 
 ### Ports
 
 - Default port: `3000`
-- CLI: `./nodepassdash --port 8080`
+- CLI: `./nb-panel --port 8080`
 - Env: `PORT=8080`
 
 ### TLS (HTTPS)
@@ -68,28 +68,28 @@ You can pass configuration either as CLI flags (recommended) or via environment 
 Provide both cert and key to enable HTTPS:
 
 ```bash
-./nodepassdash --cert /path/to/cert.pem --key /path/to/key.pem
+./nb-panel --cert /path/to/cert.pem --key /path/to/key.pem
 ```
 
 In Docker, mount the certificate files and pass the flags via `command:`:
 
 ```yaml
 services:
-  nodepassdash:
-    image: ghcr.io/nodepassproject/nodepassdash:latest
+  nb-panel:
+    image: ghcr.io/nodepassproject/nb-panel:latest
     ports: ["443:443"]
     volumes:
       - ./db:/app/db
       - ./logs:/app/logs
       - ./certs/fullchain.pem:/certs/fullchain.pem:ro
       - ./certs/privkey.pem:/certs/privkey.pem:ro
-    command: ["./nodepassdash","--port","443","--cert","/certs/fullchain.pem","--key","/certs/privkey.pem"]
+    command: ["./nb-panel","--port","443","--cert","/certs/fullchain.pem","--key","/certs/privkey.pem"]
 ```
 
 ### Disable Password Login (OAuth2 only)
 
 ```bash
-./nodepassdash --disable-login
+./nb-panel --disable-login
 ```
 
 If you enable this, make sure OAuth2 is configured in the UI first; otherwise you may lock yourself out.
@@ -117,5 +117,5 @@ If you pin to a version tag, update the tag in `docker-compose.yml` first.
 ## Troubleshooting
 
 - Check health: `curl -fsS http://localhost:3000/api/health`
-- View logs: `docker logs -f nodepassdash`
-- Reset admin password (requires restart after): `docker exec -it nodepassdash ./nodepassdash --resetpwd`
+- View logs: `docker logs -f nb-panel`
+- Reset admin password (requires restart after): `docker exec -it nb-panel ./nb-panel --resetpwd`

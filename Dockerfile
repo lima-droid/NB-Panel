@@ -58,7 +58,7 @@ ENV CGO_ENABLED=1
 ENV CGO_CFLAGS="-D_LARGEFILE64_SOURCE"
 
 # 编译 Backend 可执行文件，注入版本号
-RUN go build -ldflags "-s -w -X main.Version=${VERSION}" -o nodepassdash ./cmd/server
+RUN go build -ldflags "-s -w -X main.Version=${VERSION}" -o nb-panel ./cmd/server
 
 # ========= 运行阶段 =========
 FROM alpine:latest
@@ -68,12 +68,12 @@ ENV APP_VERSION=$VERSION
 WORKDIR /app
 
 # 只需要拷贝可执行文件（静态资源已通过 embed 嵌入）
-COPY --from=backend-builder /app/nodepassdash ./
+COPY --from=backend-builder /app/nb-panel ./
 
 # 默认端口
 EXPOSE 3000
 
 # 启动命令
-CMD ["/app/nodepassdash"]
+CMD ["/app/nb-panel"]
 
 # --- 至此，镜像构建完成 --- 

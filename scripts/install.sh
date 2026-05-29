@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# NodePassDash 一键安装脚本
+# NB-Panel 一键安装脚本
 # 支持 Linux 系统的自动安装和配置
 
 set -e
@@ -18,10 +18,10 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # 配置变量
-BINARY_NAME="nodepassdash"
-INSTALL_DIR="/opt/nodepassdash"
+BINARY_NAME="nb-panel"
+INSTALL_DIR="/opt/nb-panel"
 USER_NAME="nodepass"
-SERVICE_NAME="nodepassdash"
+SERVICE_NAME="nb-panel"
 DEFAULT_PORT="3000"
 
 # 用户配置变量
@@ -32,7 +32,7 @@ KEY_PATH=""
 VERSION_TYPE="stable"  # stable 或 beta
 
 # GitHub 仓库信息
-GITHUB_REPO="NodePassProject/NodePassDash"
+GITHUB_REPO="lima-droid/NB-Panel"
 GITHUB_API="https://api.github.com/repos/${GITHUB_REPO}"
 
 # 日志函数
@@ -54,14 +54,14 @@ log_error() {
 
 # 显示使用帮助
 show_help() {
-    echo "NodePassDash 一键安装/卸载脚本"
+    echo "NB-Panel 一键安装/卸载脚本"
     echo
     echo "使用方式:"
     echo "  $0 [install|uninstall|switch] [选项]"
     echo
     echo "命令:"
-    echo "  install    安装 NodePassDash (默认)"
-    echo "  uninstall  卸载 NodePassDash"
+    echo "  install    安装 NB-Panel (默认)"
+    echo "  uninstall  卸载 NB-Panel"
     echo "  switch     切换版本 (stable <-> beta)"
     echo
     echo "安装选项:"
@@ -163,7 +163,7 @@ parse_args() {
 interactive_config() {
     echo
     echo "=========================================="
-    echo "🔧 NodePassDash 配置"
+    echo "🔧 NB-Panel 配置"
     echo "=========================================="
     echo
 
@@ -371,7 +371,7 @@ get_latest_version() {
         exit 1
     fi
 
-    DOWNLOAD_URL="https://github.com/${GITHUB_REPO}/releases/download/${VERSION}/NodePassDash_${DOWNLOAD_ARCH}.tar.gz"
+    DOWNLOAD_URL="https://github.com/${GITHUB_REPO}/releases/download/${VERSION}/NB-Panel_${DOWNLOAD_ARCH}.tar.gz"
 
     log_success "最新${VERSION_TYPE}版本: $VERSION"
     log_info "下载架构: $DOWNLOAD_ARCH"
@@ -379,11 +379,11 @@ get_latest_version() {
 
 # 下载并解压二进制文件
 download_binary() {
-    log_info "下载 NodePassDash 压缩包..."
+    log_info "下载 NB-Panel 压缩包..."
     log_info "下载地址: $DOWNLOAD_URL"
     
-    local temp_archive="/tmp/nodepassdash-${VERSION}.tar.gz"
-    local temp_dir="/tmp/nodepassdash-extract"
+    local temp_archive="/tmp/nb-panel-${VERSION}.tar.gz"
+    local temp_dir="/tmp/nb-panel-extract"
     local temp_binary="/tmp/${BINARY_NAME}"
     
     # 下载压缩包
@@ -487,7 +487,7 @@ setup_user_and_dirs() {
     # 设置权限
     chown -R root:root "$INSTALL_DIR/bin" 2>/dev/null || true
     chown -R "$USER_NAME:$USER_NAME" "$INSTALL_DIR"/{db,logs,backups}
-    # nodepassdash 需要在工作目录创建数据库文件，确保有写权限
+    # nb-panel 需要在工作目录创建数据库文件，确保有写权限
     chown "$USER_NAME:$USER_NAME" "$INSTALL_DIR"
     
     log_success "目录结构创建完成"
@@ -521,7 +521,7 @@ create_config() {
     local config_file="$INSTALL_DIR/config.env"
     
     cat > "$config_file" << EOF
-# NodePassDash 配置文件
+# NB-Panel 配置文件
 # 此文件由安装脚本自动生成
 
 # 版本信息
@@ -590,8 +590,8 @@ create_systemd_service() {
     
     cat > /etc/systemd/system/$SERVICE_NAME.service << EOF
 [Unit]
-Description=NodePassDash - NodePass Management Dashboard
-Documentation=https://github.com/NodePassProject/NodePassDash
+Description=NB-Panel - NodePass Management Dashboard
+Documentation=https://github.com/lima-droid/NB-Panel
 After=network.target
 Wants=network-online.target
 
@@ -609,7 +609,7 @@ EnvironmentFile=-$INSTALL_DIR/config.env
 # 日志输出
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=nodepassdash
+SyslogIdentifier=nb-panel
 
 # 安全设置
 NoNewPrivileges=true
@@ -643,15 +643,15 @@ EOF
 create_management_script() {
     log_info "创建管理脚本..."
     
-    cat > /usr/local/bin/nodepassdash-ctl << 'EOF'
+    cat > /usr/local/bin/nb-panel-ctl << 'EOF'
 #!/bin/bash
 
-# NodePassDash 管理脚本
-# 使用方式: nodepassdash-ctl {start|stop|restart|status|logs|reset-password|update|config|uninstall}
+# NB-Panel 管理脚本
+# 使用方式: nb-panel-ctl {start|stop|restart|status|logs|reset-password|update|config|uninstall}
 
-BINARY_PATH="/opt/nodepassdash/bin/nodepassdash"
-SERVICE_NAME="nodepassdash"
-INSTALL_DIR="/opt/nodepassdash"
+BINARY_PATH="/opt/nb-panel/bin/nb-panel"
+SERVICE_NAME="nb-panel"
+INSTALL_DIR="/opt/nb-panel"
 CONFIG_FILE="$INSTALL_DIR/config.env"
 
 show_config() {
@@ -663,8 +663,8 @@ show_config() {
     fi
 }
 
-uninstall_nodepassdash() {
-    echo "开始卸载 NodePassDash..."
+uninstall_nb-panel() {
+    echo "开始卸载 NB-Panel..."
 
     # 停止并禁用服务
     if systemctl is-active --quiet $SERVICE_NAME; then
@@ -697,16 +697,16 @@ uninstall_nodepassdash() {
     fi
 
     # 删除软链接
-    if [[ -L "/usr/local/bin/nodepassdash" ]]; then
+    if [[ -L "/usr/local/bin/nb-panel" ]]; then
         echo "删除软链接..."
-        sudo rm -f "/usr/local/bin/nodepassdash"
+        sudo rm -f "/usr/local/bin/nb-panel"
     fi
 
     # 删除管理脚本本身
     echo "删除管理脚本..."
-    sudo rm -f "/usr/local/bin/nodepassdash-ctl"
+    sudo rm -f "/usr/local/bin/nb-panel-ctl"
 
-    echo "NodePassDash 卸载完成！"
+    echo "NB-Panel 卸载完成！"
 }
 
 switch_version() {
@@ -737,23 +737,23 @@ switch_version() {
     # 使用安装脚本进行切换
     echo "开始切换版本..."
     if [[ "$target_type" == "beta" ]]; then
-        curl -fsSL https://raw.githubusercontent.com/NodePassProject/NodePassDash/main/scripts/install.sh | sudo bash -s -- install --beta --non-interactive
+        curl -fsSL https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scripts/install.sh | sudo bash -s -- install --beta --non-interactive
     else
-        curl -fsSL https://raw.githubusercontent.com/NodePassProject/NodePassDash/main/scripts/install.sh | sudo bash -s -- install --non-interactive
+        curl -fsSL https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scripts/install.sh | sudo bash -s -- install --non-interactive
     fi
 }
 
 case "$1" in
     start)
-        echo "启动 NodePassDash..."
+        echo "启动 NB-Panel..."
         sudo systemctl start $SERVICE_NAME
         ;;
     stop)
-        echo "停止 NodePassDash..."
+        echo "停止 NB-Panel..."
         sudo systemctl stop $SERVICE_NAME
         ;;
     restart)
-        echo "重启 NodePassDash..."
+        echo "重启 NB-Panel..."
         sudo systemctl restart $SERVICE_NAME
         ;;
     status)
@@ -769,17 +769,17 @@ case "$1" in
         sudo systemctl start $SERVICE_NAME
         ;;
     update)
-        echo "更新 NodePassDash..."
-        curl -fsSL https://raw.githubusercontent.com/NodePassProject/NodePassDash/main/scripts/install.sh | sudo bash
+        echo "更新 NB-Panel..."
+        curl -fsSL https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scripts/install.sh | sudo bash
         ;;
     config)
         show_config
         ;;
     uninstall)
-        echo "确认要卸载 NodePassDash 吗？[y/N]"
+        echo "确认要卸载 NB-Panel 吗？[y/N]"
         read -r confirm
         if [[ "$confirm" =~ ^[Yy]$ ]]; then
-            uninstall_nodepassdash
+            uninstall_nb-panel
         else
             echo "取消卸载"
         fi
@@ -794,7 +794,7 @@ case "$1" in
 esac
 EOF
     
-    chmod +x /usr/local/bin/nodepassdash-ctl
+    chmod +x /usr/local/bin/nb-panel-ctl
     
     log_success "管理脚本创建完成"
 }
@@ -857,7 +857,7 @@ configure_firewall() {
 
 # 启动服务
 start_service() {
-    log_info "启动 NodePassDash 服务..."
+    log_info "启动 NB-Panel 服务..."
     
     # 再次验证二进制文件
     log_info "验证二进制文件..."
@@ -902,7 +902,7 @@ show_result() {
     
     echo
     echo "=========================================="
-    echo -e "${GREEN}🎉 NodePassDash 安装完成！${NC}"
+    echo -e "${GREEN}🎉 NB-Panel 安装完成！${NC}"
     echo "=========================================="
     echo
     echo "📍 访问地址:"
@@ -910,16 +910,16 @@ show_result() {
     echo "   $protocol://localhost:$USER_PORT (本地)"
     echo
     echo "🔧 管理命令:"
-    echo "   nodepassdash-ctl start       # 启动服务"
-    echo "   nodepassdash-ctl stop        # 停止服务"
-    echo "   nodepassdash-ctl restart     # 重启服务"
-    echo "   nodepassdash-ctl status      # 查看状态"
-    echo "   nodepassdash-ctl logs        # 查看日志"
-    echo "   nodepassdash-ctl reset-password  # 重置密码"
-    echo "   nodepassdash-ctl update      # 更新版本"
-    echo "   nodepassdash-ctl switch-version  # 切换版本 (stable/beta)"
-    echo "   nodepassdash-ctl config      # 查看配置"
-    echo "   nodepassdash-ctl uninstall   # 卸载系统"
+    echo "   nb-panel-ctl start       # 启动服务"
+    echo "   nb-panel-ctl stop        # 停止服务"
+    echo "   nb-panel-ctl restart     # 重启服务"
+    echo "   nb-panel-ctl status      # 查看状态"
+    echo "   nb-panel-ctl logs        # 查看日志"
+    echo "   nb-panel-ctl reset-password  # 重置密码"
+    echo "   nb-panel-ctl update      # 更新版本"
+    echo "   nb-panel-ctl switch-version  # 切换版本 (stable/beta)"
+    echo "   nb-panel-ctl config      # 查看配置"
+    echo "   nb-panel-ctl uninstall   # 卸载系统"
     echo
     echo "📁 重要路径:"
     echo "   程序目录: $INSTALL_DIR"
@@ -942,28 +942,28 @@ show_result() {
     echo "🔑 初始密码:"
     echo "   系统将在首次运行时自动生成管理员账户"
     echo "   请查看启动日志获取初始密码:"
-    echo "   journalctl -u nodepassdash | grep -A 6 '系统初始化完成'"
+    echo "   journalctl -u nb-panel | grep -A 6 '系统初始化完成'"
     echo
     echo "📚 文档链接:"
-    echo "   GitHub: https://github.com/NodePassProject/NodePassDash"
-    echo "   部署文档: https://github.com/NodePassProject/NodePassDash/blob/main/docs/BINARY.md"
+    echo "   GitHub: https://github.com/lima-droid/NB-Panel"
+    echo "   部署文档: https://github.com/lima-droid/NB-Panel/blob/main/docs/BINARY.md"
     echo
     echo "❓ 如需帮助，请访问:"
-    echo "   Issues: https://github.com/NodePassProject/NodePassDash/issues"
-    echo "   Telegram: https://t.me/NodePassGroup"
+    echo "   Issues: https://github.com/lima-droid/NB-Panel/issues"
+    echo "   Telegram: https://t.me/CubeMihomo"
     echo "=========================================="
 }
 
 # 卸载功能
 main_uninstall() {
     echo "=========================================="
-    echo "🗑️  NodePassDash 卸载程序"
+    echo "🗑️  NB-Panel 卸载程序"
     echo "=========================================="
     echo
     
     check_root
     
-    log_warning "即将卸载 NodePassDash 及其所有数据"
+    log_warning "即将卸载 NB-Panel 及其所有数据"
     echo -n "确认要继续吗？[y/N]: "
     read confirm
     if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
@@ -991,10 +991,10 @@ main_uninstall() {
     
     # 备份数据（可选）
     if [[ -d "$INSTALL_DIR/db" ]] && [[ -n "$(ls -A $INSTALL_DIR/db 2>/dev/null)" ]]; then
-        echo -n "是否备份数据到 /tmp/nodepassdash-backup-$(date +%Y%m%d%H%M%S).tar.gz？[Y/n]: "
+        echo -n "是否备份数据到 /tmp/nb-panel-backup-$(date +%Y%m%d%H%M%S).tar.gz？[Y/n]: "
         read backup_confirm
         if [[ ! "$backup_confirm" =~ ^[Nn]$ ]]; then
-            local backup_file="/tmp/nodepassdash-backup-$(date +%Y%m%d%H%M%S).tar.gz"
+            local backup_file="/tmp/nb-panel-backup-$(date +%Y%m%d%H%M%S).tar.gz"
             log_info "备份数据到 $backup_file..."
             tar -czf "$backup_file" -C "$INSTALL_DIR" db logs config.env 2>/dev/null || true
             log_success "数据已备份到 $backup_file"
@@ -1020,9 +1020,9 @@ main_uninstall() {
     fi
     
     # 删除管理脚本
-    if [[ -f "/usr/local/bin/nodepassdash-ctl" ]]; then
+    if [[ -f "/usr/local/bin/nb-panel-ctl" ]]; then
         log_info "删除管理脚本..."
-        rm -f "/usr/local/bin/nodepassdash-ctl"
+        rm -f "/usr/local/bin/nb-panel-ctl"
     fi
     
     # 删除防火墙规则（可选）
@@ -1052,17 +1052,17 @@ main_uninstall() {
     
     echo
     echo "=========================================="
-    echo -e "${GREEN}✅ NodePassDash 卸载完成！${NC}"
+    echo -e "${GREEN}✅ NB-Panel 卸载完成！${NC}"
     echo "=========================================="
     echo
-    log_success "NodePassDash 已完全从系统中移除"
+    log_success "NB-Panel 已完全从系统中移除"
     echo
 }
 
 # 版本切换功能
 main_switch_version() {
     echo "=========================================="
-    echo "🔄 NodePassDash 版本切换"
+    echo "🔄 NB-Panel 版本切换"
     echo "=========================================="
     echo
 
@@ -1070,7 +1070,7 @@ main_switch_version() {
 
     # 检查是否已安装
     if [[ ! -f "$INSTALL_DIR/bin/$BINARY_NAME" ]]; then
-        log_error "NodePassDash 未安装，请先安装"
+        log_error "NB-Panel 未安装，请先安装"
         exit 1
     fi
 
@@ -1140,15 +1140,15 @@ main_switch_version() {
     echo
     echo "新版本: $VERSION ($target_type)"
     echo
-    echo "使用 'nodepassdash-ctl status' 查看服务状态"
-    echo "使用 'nodepassdash-ctl logs' 查看运行日志"
+    echo "使用 'nb-panel-ctl status' 查看服务状态"
+    echo "使用 'nb-panel-ctl logs' 查看运行日志"
     echo "=========================================="
 }
 
 # 主安装流程
 main_install() {
     echo "=========================================="
-    echo "🚀 NodePassDash 一键安装脚本"
+    echo "🚀 NB-Panel 一键安装脚本"
     echo "=========================================="
     echo
     
@@ -1171,8 +1171,8 @@ main_install() {
 # 清理临时文件
 cleanup() {
     rm -f /tmp/$BINARY_NAME
-    rm -f /tmp/nodepassdash-*.tar.gz
-    rm -rf /tmp/nodepassdash-extract
+    rm -f /tmp/nb-panel-*.tar.gz
+    rm -rf /tmp/nb-panel-extract
 }
 
 # 错误处理

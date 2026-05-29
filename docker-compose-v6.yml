@@ -1,8 +1,8 @@
 services:
   # NodePass 应用 - 使用GitHub发布的镜像
-  nodepassdash:
-    image: ghcr.io/nodepassproject/nodepassdash:latest
-    container_name: nodepassdash
+  nb-panel:
+    image: ghcr.io/lima-droid/nb-panel:latest
+    container_name: nb-panel
     ports:
       - "3000:3000"  # Web UI + API (single port)
     # environment:

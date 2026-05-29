@@ -12,13 +12,13 @@
 仓库提供安装脚本：`scripts/install.sh`。
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/NodePassProject/NodePassDash/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scripts/install.sh | bash
 ```
 
 建议先下载检查再运行：
 
 ```bash
-wget https://raw.githubusercontent.com/NodePassProject/NodePassDash/main/scripts/install.sh
+wget https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scripts/install.sh
 chmod +x install.sh
 ./install.sh
 ```

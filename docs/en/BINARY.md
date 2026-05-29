@@ -1,6 +1,6 @@
-# Binary Deployment (NodePassDash)
+# Binary Deployment (NB-Panel)
 
-This guide deploys NodePassDash as a native binary on a server (recommended for VPS / systemd environments).
+This guide deploys NB-Panel as a native binary on a server (recommended for VPS / systemd environments).
 
 ## Requirements
 
@@ -9,16 +9,16 @@ This guide deploys NodePassDash as a native binary on a server (recommended for 
 
 ## Option A: Install Script (Recommended)
 
-NodePassDash provides an installation script in this repo: `scripts/install.sh`.
+NB-Panel provides an installation script in this repo: `scripts/install.sh`.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/NodePassProject/NodePassDash/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scripts/install.sh | bash
 ```
 
 If you prefer to inspect it first:
 
 ```bash
-wget https://raw.githubusercontent.com/NodePassProject/NodePassDash/main/scripts/install.sh
+wget https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scripts/install.sh
 chmod +x install.sh
 ./install.sh
 ```
@@ -26,28 +26,28 @@ chmod +x install.sh
 ## Option B: Manual Install (Releases)
 
 1) Download the archive from GitHub Releases and extract it.
-2) Put the `nodepassdash` binary in a directory, for example: `/opt/nodepassdash/bin/nodepassdash`.
+2) Put the `nb-panel` binary in a directory, for example: `/opt/nb-panel/bin/nb-panel`.
 3) Run from the working directory so `db/` and `logs/` are created next to it:
 
 ```bash
-cd /opt/nodepassdash
-./bin/nodepassdash --port 3000
+cd /opt/nb-panel
+./bin/nb-panel --port 3000
 ```
 
 ## Systemd Example
 
-Create `/etc/systemd/system/nodepassdash.service`:
+Create `/etc/systemd/system/nb-panel.service`:
 
 ```ini
 [Unit]
-Description=NodePassDash
+Description=NB-Panel
 After=network.target
 Wants=network-online.target
 
 [Service]
 Type=simple
-WorkingDirectory=/opt/nodepassdash
-ExecStart=/opt/nodepassdash/bin/nodepassdash --port 3000
+WorkingDirectory=/opt/nb-panel
+ExecStart=/opt/nb-panel/bin/nb-panel --port 3000
 Restart=on-failure
 RestartSec=2
 
@@ -59,18 +59,18 @@ Enable and start:
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable --now nodepassdash
-sudo systemctl status nodepassdash --no-pager
+sudo systemctl enable --now nb-panel
+sudo systemctl status nb-panel --no-pager
 ```
 
 ## First Login / Reset Password
 
-- First start prints initial admin credentials in logs (`journalctl -u nodepassdash -n 200`).
+- First start prints initial admin credentials in logs (`journalctl -u nb-panel -n 200`).
 - Reset admin password:
 
 ```bash
-/opt/nodepassdash/bin/nodepassdash --resetpwd
-sudo systemctl restart nodepassdash
+/opt/nb-panel/bin/nb-panel --resetpwd
+sudo systemctl restart nb-panel
 ```
 
 ## HTTPS (TLS)
@@ -78,10 +78,10 @@ sudo systemctl restart nodepassdash
 Provide cert and key:
 
 ```bash
-/opt/nodepassdash/bin/nodepassdash --port 443 --cert /path/to/cert.pem --key /path/to/key.pem
+/opt/nb-panel/bin/nb-panel --port 443 --cert /path/to/cert.pem --key /path/to/key.pem
 ```
 
-In production, you can also keep NodePassDash on an internal port and place it behind Nginx/Caddy.
+In production, you can also keep NB-Panel on an internal port and place it behind Nginx/Caddy.
 
 ## Upgrade
 

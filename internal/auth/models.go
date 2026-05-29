@@ -47,9 +47,9 @@ const (
 	DefaultAdminPassword = "Np123456"
 )
 
-// GetDefaultAdminPassword 从环境变量 NODEPASS_ADMIN_PASSWORD 读取默认管理员密码，默认 "Np123456"
+// GetDefaultAdminPassword 从环境变量 NB_PANEL_ADMIN_PASSWORD 读取默认管理员密码，默认 "Np123456"
 func GetDefaultAdminPassword() string {
-	if pwd := os.Getenv("NODEPASS_ADMIN_PASSWORD"); pwd != "" {
+	if pwd := os.Getenv("NB_PANEL_ADMIN_PASSWORD"); pwd != "" {
 		return pwd
 	}
 	return DefaultAdminPassword

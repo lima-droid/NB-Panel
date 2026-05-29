@@ -8,7 +8,7 @@ builds:
     env:
       - CGO_ENABLED=1
     main: ./cmd/server
-    binary: nodepassdash
+    binary: nb-panel
     goos:
       - linux
     goarch:
@@ -30,7 +30,7 @@ builds:
       - CGO_ENABLED=1
       - CC=aarch64-linux-gnu-gcc
     main: ./cmd/server
-    binary: nodepassdash
+    binary: nb-panel
     goos:
       - linux
     goarch:
@@ -52,7 +52,7 @@ builds:
       - CGO_ENABLED=1
       - CC=arm-linux-gnueabihf-gcc
     main: ./cmd/server
-    binary: nodepassdash
+    binary: nb-panel
     goos:
       - linux
     goarch:
@@ -76,7 +76,7 @@ builds:
       - CGO_ENABLED=1
       - CC=arm-linux-gnueabi-gcc
     main: ./cmd/server
-    binary: nodepassdash
+    binary: nb-panel
     goos:
       - linux
     goarch:
@@ -102,7 +102,7 @@ builds:
       - CGO_ENABLED=1
       - CC=x86_64-w64-mingw32-gcc
     main: ./cmd/server
-    binary: nodepassdash
+    binary: nb-panel
     goos:
       - windows
     goarch:
@@ -124,7 +124,7 @@ builds:
       - CGO_ENABLED=1
       - CC=i686-w64-mingw32-gcc
     main: ./cmd/server
-    binary: nodepassdash
+    binary: nb-panel
     goos:
       - windows
     goarch:
@@ -164,12 +164,12 @@ release:
   # 自动检测预发布版本 (包含 alpha, beta, rc 等)
   prerelease: auto
   # 发布名称模板
-  name_template: "NodePassDash {{ .Version }}"
+  name_template: "NB-Panel {{ .Version }}"
   # 允许替换已存在的发布
   replace_existing_draft: true
   # 发布说明
   header: |
-    # NodePassDash v3.3.0 更新日志
+    # NB-Panel v3.3.0 更新日志
     
     🌍 主要特性：完整的国际化(i18n)支持
   
@@ -210,21 +210,21 @@ release:
   footer: |
     
     ### 📥 下载说明
-    - **Linux x86_64**: `nodepassdash_Linux_x86_64.tar.gz` (服务器推荐)
-    - **Linux ARM64**: `nodepassdash_Linux_arm64.tar.gz` (树莓派4 64位、ARM服务器)
-    - **Linux ARMv7**: `nodepassdash_Linux_armv7hf.tar.gz` (树莓派2/3/4 32位)
-    - **Linux ARMv6**: `nodepassdash_Linux_armv6.tar.gz` (树莓派1、老设备)
-    - **Windows 64位**: `nodepassdash_Windows_x86_64.zip`
-    - **Windows 32位**: `nodepassdash_Windows_i386.zip`
+    - **Linux x86_64**: `nb-panel_Linux_x86_64.tar.gz` (服务器推荐)
+    - **Linux ARM64**: `nb-panel_Linux_arm64.tar.gz` (树莓派4 64位、ARM服务器)
+    - **Linux ARMv7**: `nb-panel_Linux_armv7hf.tar.gz` (树莓派2/3/4 32位)
+    - **Linux ARMv6**: `nb-panel_Linux_armv6.tar.gz` (树莓派1、老设备)
+    - **Windows 64位**: `nb-panel_Windows_x86_64.zip`
+    - **Windows 32位**: `nb-panel_Windows_i386.zip`
     
     ### 🐳 Docker 镜像
     ```bash
-    docker pull ghcr.io/nodepassproject/nodepassdash:{{ .Version }}
+    docker pull ghcr.io/lima-droid/nb-panel:{{ .Version }}
     ```
     
     ### 🔧 使用说明
     1. 下载对应架构的二进制文件
-    2. 解压后直接运行 `./nodepassdash`（无需外部依赖）
+    2. 解压后直接运行 `./nb-panel`（无需外部依赖）
     3. 默认监听 `http://localhost:3000`
     
     ### 📝 部署说明

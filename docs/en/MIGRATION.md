@@ -15,7 +15,7 @@
 ### 3. Pull the Latest Image
 
 ```bash
-docker pull ghcr.io/nodepassproject/nodepassdash:latest
+docker pull ghcr.io/nodepassproject/nb-panel:latest
 ```
 
 ### 4. Restart Container
@@ -57,6 +57,6 @@ A: Yes, but you need to use the data backed up before the upgrade. It is recomme
 
 If you encounter problems during migration:
 
-- Check [GitHub Issues](https://github.com/NodePassProject/NodePassDash/issues)
-- Join [Telegram Group](https://t.me/NodePassGroup) for help
-- Follow [Telegram Channel](https://t.me/NodePassChannel) for latest updates
+- Check [GitHub Issues](https://github.com/lima-droid/NB-Panel/issues)
+- Join [Telegram Group](https://t.me/CubeMihomo) for help
+- Follow [Telegram Channel](https://t.me/CubeMihomo) for latest updates

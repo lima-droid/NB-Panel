@@ -32,6 +32,6 @@ Open:
 pnpm build
 
 # if you only want the backend binary
-CGO_ENABLED=1 go build -o nodepassdash ./cmd/server
+CGO_ENABLED=1 go build -o nb-panel ./cmd/server
 ```
 
