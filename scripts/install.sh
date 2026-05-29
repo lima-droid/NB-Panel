@@ -197,9 +197,9 @@ EOF
   [[ "$ENABLE_HTTPS" == "true" ]] && proto="https"
 
   echo
-  echo -e "${BOLD}${GREEN}+────────────────────────────+${NC}"
-  echo -e "${BOLD}${GREEN}| NB面板 安装完成！         |${NC}"
-  echo -e "${BOLD}${GREEN}+────────────────────────────+${NC}"
+  echo -e "${BOLD}${GREEN}+────────────────────+${NC}"
+  echo -e "${BOLD}${GREEN}|   NB面板 安装完成！ |${NC}"
+  echo -e "${BOLD}${GREEN}+────────────────────+${NC}"
   echo
   echo -e " 访问地址: ${CYAN}${proto}://${DASH_IP}:${USER_PORT}${NC}"
   echo -e " 本地访问: ${CYAN}${proto}://localhost:${USER_PORT}${NC}"
@@ -266,8 +266,8 @@ show_header() {
   clear
   echo
   echo -e " ${BOLD}${BLUE}+──────────────────────────────+${NC}"
-  echo -e " ${BOLD}${BLUE}|${NC}         NB面板 安装管理器 ${BOLD}${BLUE}    |${NC}"
-  echo -e " ${BOLD}${BLUE}|${NC} v${SCRIPT_VERSION} · ${CYAN}github.com/lima-droid/NB-Panel${NC} ${BOLD}${BLUE}|${NC}"
+  echo -e " ${BOLD}${BLUE}|${NC}        NB面板 安装管理器 ${BOLD}${BLUE}    |${NC}"
+  echo -e " ${BOLD}${BLUE}|${NC}  ${CYAN}github.com/lima-droid/NB-Panel${NC} ${BOLD}${BLUE}|${NC}"
   echo -e " ${BOLD}${BLUE}+──────────────────────────────+${NC}"
   echo
 }
