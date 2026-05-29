@@ -2,7 +2,7 @@
 # Next.js应用内置SSE服务，单端口运行
 
 # ========= 前端构建阶段 =========
-FROM node:20-alpine AS frontend-builder
+FROM node:22-alpine AS frontend-builder
 
 # 使用 corepack 预装 pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -76,4 +76,4 @@ EXPOSE 4000
 # 启动命令
 CMD ["/app/nb-panel"]
 
-# --- 至此，镜像构建完成 --- 
+# --- 至此，镜像构建完成 ---
