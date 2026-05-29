@@ -49,7 +49,7 @@ export function useNodePassSSE(
           eventSourceRef.current?.removeEventListener(eventType, listener);
         } catch (error) {
           // 静默处理移除失败的情况
-          console.debug(`[NodePass SSE] 移除事件监听器失败: ${eventType}`);
+          console.debug(`[NB面板 SSE] 移除事件监听器失败: ${eventType}`);
         }
       });
       eventListenersRef.current.clear();
@@ -61,7 +61,7 @@ export function useNodePassSSE(
         eventSourceRef.current.close();
       } catch (error) {
         // 静默处理关闭失败的情况
-        console.debug("[NodePass SSE] 关闭EventSource失败");
+        console.debug("[NB面板 SSE] 关闭EventSource失败");
       } finally {
         eventSourceRef.current = null;
       }
@@ -73,7 +73,7 @@ export function useNodePassSSE(
         abortControllerRef.current.abort();
       } catch (error) {
         // 静默处理abort失败的情况
-        console.debug("[NodePass SSE] AbortController abort失败");
+        console.debug("[NB面板 SSE] AbortController abort失败");
       } finally {
         abortControllerRef.current = null;
       }
@@ -84,14 +84,14 @@ export function useNodePassSSE(
     (endpoint: NodePassEndpoint) => {
       // 如果已经在连接中，避免重复连接
       if (isConnecting || eventSourceRef.current) {
-        console.log("[NodePass SSE] 连接已存在，跳过重复连接");
+        console.log("[NB面板 SSE] 连接已存在，跳过重复连接");
 
         return;
       }
 
       // 检查endpoint参数是否有效
       if (!endpoint || !endpoint.url || !endpoint.apiPath || !endpoint.apiKey) {
-        console.error("[NodePass SSE] endpoint参数无效:", endpoint);
+        console.error("[NB面板 SSE] endpoint参数无效:", endpoint);
         setError("endpoint配置无效");
 
         return;
@@ -102,7 +102,7 @@ export function useNodePassSSE(
         setIsConnecting(true);
         setError(null);
 
-        // 使用后端代理接口连接NodePass SSE
+        // 使用后端代理接口连接NB面板 SSE
         const token = getAuthToken();
         const proxyUrl = buildApiUrl(
           `/api/sse/nodepass-proxy?endpointId=${btoa(
@@ -114,12 +114,12 @@ export function useNodePassSSE(
           )}`,
         );
 
-        console.log("[NodePass SSE] 通过代理连接:", proxyUrl);
+        console.log("[NB面板 SSE] 通过代理连接:", proxyUrl);
 
         const fullUrl = new URL(proxyUrl, window.location.origin);
         if (token) fullUrl.searchParams.set("token", token);
 
-        console.log("[NodePass SSE] 完整URL:", fullUrl.toString());
+        console.log("[NB面板 SSE] 完整URL:", fullUrl.toString());
 
         const eventSource = new EventSource(fullUrl.toString());
 
@@ -130,7 +130,7 @@ export function useNodePassSSE(
         } as AbortController;
 
         eventSource.onopen = () => {
-          console.log("[NodePass SSE] 代理连接已建立");
+          console.log("[NB面板 SSE] 代理连接已建立");
           setIsConnected(true);
           setIsConnecting(false);
           setError(null);
@@ -140,24 +140,24 @@ export function useNodePassSSE(
         };
 
         const processEvent = (event: MessageEvent) => {
-          console.log("[NodePass SSE] ========== 新消息开始 ==========");
-          console.log("[NodePass SSE] 原始事件数据:", event.data);
-          console.log("[NodePass SSE] 数据类型:", typeof event.data);
+          console.log("[NB面板 SSE] ========== 新消息开始 ==========");
+          console.log("[NB面板 SSE] 原始事件数据:", event.data);
+          console.log("[NB面板 SSE] 数据类型:", typeof event.data);
 
           try {
             // 首先尝试解析为JSON
             const data = JSON.parse(event.data);
 
-            console.log("[NodePass SSE] JSON解析成功:", data);
-            console.log("[NodePass SSE] 消息类型:", data.type);
+            console.log("[NB面板 SSE] JSON解析成功:", data);
+            console.log("[NB面板 SSE] 消息类型:", data.type);
 
-            console.log("[NodePass SSE] 调用onMessage回调，传递数据:", data);
+            console.log("[NB面板 SSE] 调用onMessage回调，传递数据:", data);
             onMessage(data);
-            console.log("[NodePass SSE] onMessage回调调用完成");
+            console.log("[NB面板 SSE] onMessage回调调用完成");
 
             // 检查是否为连接确认消息
             if (data.type === "connected") {
-              console.log("[NodePass SSE] 收到连接确认消息");
+              console.log("[NB面板 SSE] 收到连接确认消息");
               setIsConnected(true);
               setIsConnecting(false);
               setError(null);
@@ -167,7 +167,7 @@ export function useNodePassSSE(
 
             // 检查是否为错误消息
             if (data.type === "error") {
-              console.error("[NodePass SSE] 收到错误消息:", data.message);
+              console.error("[NB面板 SSE] 收到错误消息:", data.message);
               setError(data.message);
               setIsConnected(false);
               setIsConnecting(false);
@@ -177,30 +177,30 @@ export function useNodePassSSE(
           } catch (parseError) {
             // 如果不是JSON，当作纯文本日志处理
             console.log(
-              "[NodePass SSE] JSON解析失败，作为文本处理:",
+              "[NB面板 SSE] JSON解析失败，作为文本处理:",
               parseError instanceof Error
                 ? parseError.message
                 : String(parseError),
             );
-            console.log("[NodePass SSE] 文本消息内容:", event.data);
+            console.log("[NB面板 SSE] 文本消息内容:", event.data);
 
-            console.log("[NodePass SSE] 调用onMessage回调处理文本消息");
+            console.log("[NB面板 SSE] 调用onMessage回调处理文本消息");
             onMessage({
               type: "log",
               message: event.data,
             });
-            console.log("[NodePass SSE] 文本消息处理完成");
+            console.log("[NB面板 SSE] 文本消息处理完成");
           }
 
-          console.log("[NodePass SSE] ========== 消息处理结束 ==========");
+          console.log("[NB面板 SSE] ========== 消息处理结束 ==========");
         };
 
         eventSource.onmessage = processEvent;
 
         // 注册统一事件处理器，兼容自定义事件类型（例如 instance、tunnel 等）
         const handleEvent = (event: MessageEvent) => {
-          console.log("[NodePass SSE] ==== 自定义事件 ====", event.type);
-          console.log("[NodePass SSE] 自定义事件数据:", event.data);
+          console.log("[NB面板 SSE] ==== 自定义事件 ====", event.type);
+          console.log("[NB面板 SSE] 自定义事件数据:", event.data);
           processEvent(event);
         };
 
@@ -208,31 +208,31 @@ export function useNodePassSSE(
         const customEventTypes = ["instance", "tunnel", "stats"];
 
         customEventTypes.forEach((evt) => {
-          console.log("[NodePass SSE] 注册自定义事件监听器:", evt);
+          console.log("[NB面板 SSE] 注册自定义事件监听器:", evt);
           try {
             eventSource.addEventListener(evt, handleEvent as EventListener);
             eventListenersRef.current.set(evt, handleEvent);
           } catch (error) {
-            console.warn(`[NodePass SSE] 注册事件监听器失败: ${evt}`, error);
+            console.warn(`[NB面板 SSE] 注册事件监听器失败: ${evt}`, error);
           }
         });
 
         // 错误事件处理
         eventSource.onerror = (error) => {
-          console.error("[NodePass SSE] 连接错误:", error);
+          console.error("[NB面板 SSE] 连接错误:", error);
           setIsConnecting(false);
           setIsConnected(false);
           setError("连接失败");
 
           // 手动模式，直接关闭连接
-          console.log("[NodePass SSE] 手动模式，关闭连接");
+          console.log("[NB面板 SSE] 手动模式，关闭连接");
           cleanup();
 
           onError(error);
           onDisconnected();
         };
       } catch (error) {
-        console.error("[NodePass SSE] 创建连接失败:", error);
+        console.error("[NB面板 SSE] 创建连接失败:", error);
         setIsConnecting(false);
         setIsConnected(false);
 
@@ -258,14 +258,14 @@ export function useNodePassSSE(
   // 手动连接功能
   const connectManually = useCallback(() => {
     if (endpoint && !isConnecting) {
-      console.log("[NodePass SSE] 手动连接");
+      console.log("[NB面板 SSE] 手动连接");
       connect(endpoint);
     }
   }, [endpoint, isConnecting, connect]);
 
   // 手动断开功能
   const disconnect = useCallback(() => {
-    console.log("[NodePass SSE] 手动断开连接");
+    console.log("[NB面板 SSE] 手动断开连接");
     cleanup();
     setIsConnected(false);
     setIsConnecting(false);
@@ -275,7 +275,7 @@ export function useNodePassSSE(
   // 手动重连功能
   const reconnect = useCallback(() => {
     if (endpoint && !isConnecting) {
-      console.log("[NodePass SSE] 手动重连");
+      console.log("[NB面板 SSE] 手动重连");
       cleanup(); // 确保清理之前的连接
       setError(null);
       connect(endpoint);
@@ -285,7 +285,7 @@ export function useNodePassSSE(
   // 组件卸载时清理连接
   useEffect(() => {
     return () => {
-      console.log("[NodePass SSE] 组件卸载，清理连接");
+      console.log("[NB面板 SSE] 组件卸载，清理连接");
       cleanup();
       setIsConnected(false);
     };

@@ -1,13 +1,13 @@
 package api
 
 import (
-	"NodePassDash/internal/db"
-	"NodePassDash/internal/endpoint"
-	log "NodePassDash/internal/log"
-	"NodePassDash/internal/models"
-	"NodePassDash/internal/nodepass"
-	"NodePassDash/internal/sse"
-	"NodePassDash/internal/tunnel"
+	"NB-Panel/internal/db"
+	"NB-Panel/internal/endpoint"
+	log "NB-Panel/internal/log"
+	"NB-Panel/internal/models"
+	"NB-Panel/internal/nodepass"
+	"NB-Panel/internal/sse"
+	"NB-Panel/internal/tunnel"
 	"encoding/json"
 	"fmt"
 	"net/http"

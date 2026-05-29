@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "NodePassDash",
-    "slogan": "NodePass 管理面板"
+    "name": "NB面板Dash",
+    "slogan": "NB面板 管理面板"
   },
   "nav": {
     "dashboard": "仪表盘",

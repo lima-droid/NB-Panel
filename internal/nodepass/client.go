@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"NodePassDash/internal/models"
+	"NB-Panel/internal/models"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -63,7 +63,7 @@ func request(method, url, apiKey string, body interface{}, dest interface{}) err
 	}
 
 	if resp.StatusCode() < 200 || resp.StatusCode() >= 300 {
-		return fmt.Errorf("NodePass API 返回错误: %d", resp.StatusCode())
+		return fmt.Errorf("NB面板 API 返回错误: %d", resp.StatusCode())
 	}
 
 	return nil
@@ -451,13 +451,13 @@ type NetworkDebugResult struct {
 // 数据读取超时可以通过URL查询参数read 设置，单位为秒或分钟：
 // read:数据读取超时时间(默认:10分钟)
 // # 设置数据读取超时为5分钟
-// nodepass "client://server.example.com:10101/127.0.0.1:8080?read=5m"
+// nb-panel "client://server.example.com:10101/127.0.0.1:8080?read=5m"
 
 // # 设置数据读取超时为30秒，适用于快速响应应用
-// nodepass "client://server.example.com:10101/127.0.0.1:8080?read=30s"
+// nb-panel "client://server.example.com:10101/127.0.0.1:8080?read=30s"
 
 // # 设置数据读取超时为30分钟，适用于长时间传输
-// nodepass "client://server.example.com:10101/127.0.0.1:8080?read=30m"
+// nb-panel "client://server.example.com:10101/127.0.0.1:8080?read=30m"
 
 // 重新生成API Key（需要知道当前的API Key）
 // async function regenerateApiKey() {
@@ -484,13 +484,13 @@ type NetworkDebugResult struct {
 // 示例：
 
 // # 限制带宽为50 Mbps
-// nodepass "server://0.0.0.0:10101/0.0.0.0:8080?rate=50"
+// nb-panel "server://0.0.0.0:10101/0.0.0.0:8080?rate=50"
 
 // # 客户端100 Mbps速率限制
-// nodepass "client://server.example.com:10101/127.0.0.1:8080?rate=100"
+// nb-panel "client://server.example.com:10101/127.0.0.1:8080?rate=100"
 
 // # 与其他参数组合使用
-// nodepass "server://0.0.0.0:10101/0.0.0.0:8080?log=error&tls=1&rate=50"
+// nb-panel "server://0.0.0.0:10101/0.0.0.0:8080?log=error&tls=1&rate=50"
 // 速率限制使用场景：
 
 // 带宽控制：防止NodePass消耗所有可用带宽

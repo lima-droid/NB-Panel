@@ -142,7 +142,7 @@
     "batchRestartCompleteDesc": "Successfully restarted {{success}} tunnels{{failed}}",
     "failedCount": ", {{count}} failed",
     "unknownError": "Unknown error",
-    "missingInstanceId": "This tunnel is missing NodePass ID, cannot perform operation",
+    "missingInstanceId": "This tunnel is missing NB面板 ID, cannot perform operation",
     "copySuccess": "Configuration copied to clipboard"
   },
   "mobile": {

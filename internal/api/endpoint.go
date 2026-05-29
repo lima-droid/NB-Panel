@@ -1,12 +1,12 @@
 package api
 
 import (
-	"NodePassDash/internal/db"
-	"NodePassDash/internal/endpoint"
-	log "NodePassDash/internal/log"
-	"NodePassDash/internal/models"
-	"NodePassDash/internal/nodepass"
-	"NodePassDash/internal/sse"
+	"NB-Panel/internal/db"
+	"NB-Panel/internal/endpoint"
+	log "NB-Panel/internal/log"
+	"NB-Panel/internal/models"
+	"NB-Panel/internal/nodepass"
+	"NB-Panel/internal/sse"
 	"crypto/tls"
 	"database/sql"
 	"encoding/json"
@@ -679,7 +679,7 @@ func (h *EndpointHandler) refreshTunnels(endpointID int64) error {
 		return fmt.Errorf("数据库连接不可用")
 	}
 
-	// 记录 NodePass 实例 ID，便于后续删除不存在的隧道
+	// 记录 NB面板 实例 ID，便于后续删除不存在的隧道
 	instanceIDSet := make(map[string]struct{})
 
 	// 使用事务执行
@@ -926,7 +926,7 @@ func (h *EndpointHandler) HandleGetEndpointDetail(c *gin.Context) {
 		return
 	}
 
-	// 先获取端点基本信息（用于连接NodePass API）
+	// 先获取端点基本信息（用于连接NB面板 API）
 	ep, err := h.endpointService.GetEndpointByID(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, endpoint.EndpointResponse{
@@ -936,7 +936,7 @@ func (h *EndpointHandler) HandleGetEndpointDetail(c *gin.Context) {
 		return
 	}
 
-	// 尝试调用NodePass API获取最新信息并更新数据库
+	// 尝试调用NB面板 API获取最新信息并更新数据库
 	func() {
 		defer func() {
 			if r := recover(); r != nil {
@@ -947,7 +947,7 @@ func (h *EndpointHandler) HandleGetEndpointDetail(c *gin.Context) {
 		// 尝试获取系统信息
 		info, err := nodepass.GetInfo(id)
 		if err != nil {
-			log.Warnf("[Master-%v] 调用NodePass API获取系统信息失败: %v", ep.ID, err)
+			log.Warnf("[Master-%v] 调用NB面板 API获取系统信息失败: %v", ep.ID, err)
 			return
 		}
 
@@ -1436,10 +1436,10 @@ func (h *EndpointHandler) HandleResetApiKey(c *gin.Context) {
 
 	log.Infof("[Master-%v] 开始重置API密钥", id)
 
-	// 1. 调用NodePass API重置密钥
+	// 1. 调用NB面板 API重置密钥
 	newAPIKey, err := h.resetNodePassAPIKey(id, ep)
 	if err != nil {
-		log.Errorf("[Master-%v] 调用NodePass重置密钥失败: %v", id, err)
+		log.Errorf("[Master-%v] 调用NB面板重置密钥失败: %v", id, err)
 		c.JSON(http.StatusInternalServerError, endpoint.EndpointResponse{
 			Success: false,
 			Error:   "重置密钥失败: " + err.Error(),
@@ -1472,17 +1472,17 @@ func (h *EndpointHandler) HandleResetApiKey(c *gin.Context) {
 	})
 }
 
-// resetNodePassAPIKey 调用NodePass API重置密钥
+// resetNodePassAPIKey 调用NB面板 API重置密钥
 func (h *EndpointHandler) resetNodePassAPIKey(endpointID int64, ep *endpoint.Endpoint) (string, error) {
-	// NodePass重置密钥需要调用nodepass.PatchInstance方法，传递instanceID="********"和action="restart"
+	// NB面板重置密钥需要调用nodepass.PatchInstance方法，传递instanceID="********"和action="restart"
 	// 根据注释，重置后的新密钥会在返回的result.url字段中
 
-	log.Infof("[Master-%v] 调用NodePass PatchInstance重置密钥，instanceID=********", endpointID)
+	log.Infof("[Master-%v] 调用NB面板 PatchInstance重置密钥，instanceID=********", endpointID)
 
 	// 构造patchBody，注意字段是小写的unexported字段，我们需要通过现有的方法来调用
 	// 使用现有的ControlInstance方法，它内部会构造正确的patchBody
 	result, err := nodepass.ControlInstance(endpointID, "********", "restart")
-	log.Infof("[Master-%v] NodePass PatchInstance重置密钥结果: %+v", endpointID, result)
+	log.Infof("[Master-%v] NB面板 PatchInstance重置密钥结果: %+v", endpointID, result)
 	if err != nil {
 		return "", fmt.Errorf("调用PatchInstance失败: %v", err)
 	}
@@ -1492,7 +1492,7 @@ func (h *EndpointHandler) resetNodePassAPIKey(endpointID int64, ep *endpoint.End
 		return "", fmt.Errorf("NodePass未返回新的API密钥")
 	}
 
-	log.Infof("[Master-%v] NodePass重置密钥成功，获得新密钥", endpointID)
+	log.Infof("[Master-%v] NB面板重置密钥成功，获得新密钥", endpointID)
 	return result.URL, nil
 }
 

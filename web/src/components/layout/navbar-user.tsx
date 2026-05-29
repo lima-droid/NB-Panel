@@ -228,7 +228,7 @@ export const NavbarUser = () => {
       const a = document.createElement("a");
 
       a.href = url;
-      a.download = `nodepassdash-${new Date().toISOString().split("T")[0]}.json`;
+      a.download = `nb-panel-${new Date().toISOString().split("T")[0]}.json`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);

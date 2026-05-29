@@ -66,7 +66,7 @@ export default function OAuthErrorPage() {
                 </div>
               </motion.div>
               <h1 className="text-2xl font-bold text-foreground">
-                NodePassDash
+                NB面板
               </h1>
               <p className="text-small text-default-500">{t("error.title")}</p>
             </CardHeader>

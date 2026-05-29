@@ -24,16 +24,16 @@
   },
   "sseTest": {
     "title": "SSE连接测试",
-    "description": "测试NodePass服务器SSE端点连通性和认证",
+    "description": "测试NB面板服务器SSE端点连通性和认证",
     "testing": "正在测试SSE连接...",
     "connected": "连接成功",
     "disconnected": "连接失败",
     "responseTime": "响应时间",
     "statusCode": "状态码",
     "modal": {
-      "title": "NodePass SSE连接测试",
-      "nodepassUrl": "NodePass URL",
-      "nodepassUrlPlaceholder": "https://your-nodepass.com",
+      "title": "NB面板 SSE连接测试",
+      "nbPanelUrl": "NB面板 URL",
+      "nbPanelUrlPlaceholder": "https://your-nb-panel.com",
       "apiKey": "API Key",
       "apiKeyPlaceholder": "请输入API密钥"
     }

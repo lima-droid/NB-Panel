@@ -9,7 +9,7 @@ const originalFetch = window.fetch;
 // 获取 token
 function getToken(): string | null {
   if (typeof window !== "undefined") {
-    return localStorage.getItem("nodepass.token");
+    return localStorage.getItem("nb-panel.token");
   }
   return null;
 }
@@ -74,9 +74,9 @@ window.fetch = async function (
   if (response.status === 401 && !isPublicEndpoint(input)) {
     console.warn("🚨 Token 已过期或被踢出，清除本地存储并跳转到登录页");
     if (typeof window !== "undefined") {
-      localStorage.removeItem("nodepass.token");
-      localStorage.removeItem("nodepass.tokenExpiresAt");
-      localStorage.removeItem("nodepass.user");
+      localStorage.removeItem("nb-panel.token");
+      localStorage.removeItem("nb-panel.tokenExpiresAt");
+      localStorage.removeItem("nb-panel.user");
 
       // 延迟跳转，避免在请求过程中跳转导致问题
       setTimeout(() => {

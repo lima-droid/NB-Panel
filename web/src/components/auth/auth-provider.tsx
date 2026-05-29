@@ -48,7 +48,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // 获取 token
   const getToken = () => {
     if (typeof window !== "undefined") {
-      return localStorage.getItem("nodepass.token");
+      return localStorage.getItem("nb-panel.token");
     }
     return null;
   };
@@ -56,9 +56,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // 设置 token
   const setToken = (token: string, expiresAt?: string) => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("nodepass.token", token);
+      localStorage.setItem("nb-panel.token", token);
       if (expiresAt) {
-        localStorage.setItem("nodepass.tokenExpiresAt", expiresAt);
+        localStorage.setItem("nb-panel.tokenExpiresAt", expiresAt);
       }
     }
   };
@@ -66,8 +66,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // 清除 token
   const clearToken = () => {
     if (typeof window !== "undefined") {
-      localStorage.removeItem("nodepass.token");
-      localStorage.removeItem("nodepass.tokenExpiresAt");
+      localStorage.removeItem("nb-panel.token");
+      localStorage.removeItem("nb-panel.tokenExpiresAt");
     }
   };
 
@@ -75,7 +75,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     if (typeof window !== "undefined") {
       try {
-        const stored = localStorage.getItem("nodepass.user");
+        const stored = localStorage.getItem("nb-panel.user");
 
         if (stored) {
           const storedUser = JSON.parse(stored) as User;
@@ -85,7 +85,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
       } catch (e) {
         console.error("读取本地用户失败", e);
-        localStorage.removeItem("nodepass.user");
+        localStorage.removeItem("nb-panel.user");
       }
     }
   }, []);
@@ -115,13 +115,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setUser(null);
         clearToken();
         if (typeof window !== "undefined") {
-          localStorage.removeItem("nodepass.user");
+          localStorage.removeItem("nb-panel.user");
         }
         return;
       }
 
       // 检查 token 是否过期（本地验证）
-      const expiresAtStr = localStorage.getItem("nodepass.tokenExpiresAt");
+      const expiresAtStr = localStorage.getItem("nb-panel.tokenExpiresAt");
       if (expiresAtStr) {
         const expiresAt = new Date(expiresAtStr);
         if (new Date() > expiresAt) {
@@ -129,7 +129,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           setUser(null);
           clearToken();
           if (typeof window !== "undefined") {
-            localStorage.removeItem("nodepass.user");
+            localStorage.removeItem("nb-panel.user");
           }
           return;
         }
@@ -137,7 +137,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       // Token 存在且未过期，从 localStorage 恢复用户信息（如果还没有）
       if (!user && typeof window !== "undefined") {
-        const stored = localStorage.getItem("nodepass.user");
+        const stored = localStorage.getItem("nb-panel.user");
         if (stored) {
           try {
             const storedUser = JSON.parse(stored) as User;
@@ -145,7 +145,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             console.log("✅ 从 localStorage 恢复用户状态", storedUser);
           } catch (e) {
             console.error("读取本地用户失败", e);
-            localStorage.removeItem("nodepass.user");
+            localStorage.removeItem("nb-panel.user");
           }
         }
       }
@@ -183,7 +183,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser(null);
       clearToken();
       if (typeof window !== "undefined") {
-        localStorage.removeItem("nodepass.user");
+        localStorage.removeItem("nb-panel.user");
       }
 
       // 延迟跳转，确保状态清理完成

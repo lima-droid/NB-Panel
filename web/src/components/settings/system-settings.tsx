@@ -51,7 +51,7 @@ const SystemSettings = forwardRef<SystemSettingsRef>((props, ref) => {
   } = useForm<SystemSettingsForm>({
     resolver: zodResolver(createSystemSettingsSchema(t)),
     defaultValues: {
-      systemName: "NodePass",
+      systemName: "NB面板",
       language: "zh",
       maxConnections: 100,
       connectionTimeout: 60,

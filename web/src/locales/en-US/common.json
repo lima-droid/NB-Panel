@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "NodePassDash",
-    "slogan": "NodePass Management Dashboard"
+    "name": "NB面板Dash",
+    "slogan": "NB面板 Management Dashboard"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -169,7 +169,7 @@
     "copyright": "NB Panel © 2026",
     "version": "v",
     "poweredBy": "Powered by",
-    "poweredByLink": "NodePass",
+    "poweredByLink": "NB面板",
     "poweredBySuffix": ""
   },
   "navbarUser": {

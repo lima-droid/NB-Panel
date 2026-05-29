@@ -1596,11 +1596,11 @@ export default function TemplatesPage() {
             ? "127.0.0.1"
             : formData.exitIp || "127.0.0.1";
 
-        return `nodepass "server://:${formData.userPort}/${targetIp}:${formData.exitPort}?log=${formData.logLevel}&tls=${formData.tlsLevel}"`;
+        return `nb-panel "server://:${formData.userPort}/${targetIp}:${formData.exitPort}?log=${formData.logLevel}&tls=${formData.tlsLevel}"`;
       case "double":
-        return `nodepass "server://:${formData.userPort}?log=${formData.logLevel}&tls=${formData.tlsLevel}" && nodepass "client://${formData.masterServer}:${formData.connectionPort}/${formData.targetMaster}:${formData.exitPort}"`;
+        return `nb-panel "server://:${formData.userPort}?log=${formData.logLevel}&tls=${formData.tlsLevel}" && nb-panel "client://${formData.masterServer}:${formData.connectionPort}/${formData.targetMaster}:${formData.exitPort}"`;
       case "intranet":
-        return `nodepass "client://${formData.masterServer}:10101/127.0.0.1:${formData.userPort}?log=${formData.logLevel}&tls=${formData.tlsLevel}"`;
+        return `nb-panel "client://${formData.masterServer}:10101/127.0.0.1:${formData.userPort}?log=${formData.logLevel}&tls=${formData.tlsLevel}"`;
       default:
         return "";
     }
@@ -1816,8 +1816,8 @@ export default function TemplatesPage() {
       {/* <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center gap-2 md:gap-0">
         <div className="flex items-center gap-2 md:gap-4">
           <div>
-            <h1 className="text-2xl font-bold">NodePass 隧道模板创建器</h1>
-            <p className="text-default-500 text-sm">使用预定义模板快速创建和配置NodePass隧道连接</p>
+            <h1 className="text-2xl font-bold">NB面板 隧道模板创建器</h1>
+            <p className="text-default-500 text-sm">使用预定义模板快速创建和配置NB面板隧道连接</p>
           </div>
         </div>
       </div> */}
@@ -1834,7 +1834,7 @@ export default function TemplatesPage() {
             <Card className="bg-default-900 dark:bg-default-100/10">
               <CardBody className="p-4">
                 <div className="text-default-400 dark:text-default-500 text-sm mb-2">
-                  # 生成的NodePass命令:
+                  # 生成的NB面板命令:
                 </div>
                 <div className="text-success-400 dark:text-success-300 font-mono text-sm break-all">
                   {generateCommand()}

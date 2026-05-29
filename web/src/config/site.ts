@@ -2,7 +2,7 @@ export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
   name: "NB面板",
-  description: "NodePass隧道管理控制面板",
+  description: "NB面板 - 隧道管理控制面板",
   navItems: [
     {
       label: "仪表盘",

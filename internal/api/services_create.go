@@ -1,9 +1,9 @@
 package api
 
 import (
-	log "NodePassDash/internal/log"
-	"NodePassDash/internal/models"
-	"NodePassDash/internal/nodepass"
+	log "NB-Panel/internal/log"
+	"NB-Panel/internal/models"
+	"NB-Panel/internal/nodepass"
 	"database/sql"
 	"fmt"
 	"net/url"

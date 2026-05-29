@@ -135,7 +135,7 @@ interface TunnelInfo {
   udpRx: number;
   udpTx: number;
   udps: number | null;
-  nodepassInfo: any;
+  nbPanelInfo: any;
   error?: string;
   instanceTags?: { [key: string]: string }; // 兼容原有逻辑，改为对象形式
 }

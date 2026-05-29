@@ -655,8 +655,8 @@ export default function DebugPage() {
                 <div className="space-y-4">
                   <Input
                     isDisabled={sseTesting}
-                    label={t("sseTest.modal.nodepassUrl")}
-                    placeholder={t("sseTest.modal.nodepassUrlPlaceholder")}
+                    label={t("sseTest.modal.nbPanelUrl")}
+                    placeholder={t("sseTest.modal.nbPanelUrlPlaceholder")}
                     startContent={
                       <FontAwesomeIcon
                         className="text-default-400"

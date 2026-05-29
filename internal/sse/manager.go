@@ -1,8 +1,8 @@
 package sse
 
 import (
-	log "NodePassDash/internal/log"
-	"NodePassDash/internal/nodepass"
+	log "NB-Panel/internal/log"
+	"NB-Panel/internal/nodepass"
 	"context"
 	"crypto/tls"
 	"database/sql"

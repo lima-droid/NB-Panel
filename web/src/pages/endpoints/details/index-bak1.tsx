@@ -2160,7 +2160,7 @@ export default function EndpointDetailPage() {
                           {/* iOS 应用 */}
                           <a
                             className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
-                            href="https://apps.apple.com/us/app/nodepass/id6747930492"
+                            href="https://apps.apple.com/us/app/nb-panel/id6747930492"
                             rel="noopener noreferrer"
                             target="_blank"
                           >

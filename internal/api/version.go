@@ -598,7 +598,7 @@ func (h *VersionHandler) detectDeploymentMethod() DeploymentInfo {
 
 		manualUpdateInfo := "手动更新方式：\n\n" +
 			"1. 从 GitHub 下载最新版本：\n" +
-			"   https://github.com/NodePassProject/NodePassDash/releases/latest\n\n" +
+			"   https://github.com/lima-droid/NB-Panel/releases/latest\n\n" +
 			"2. 停止当前程序\n\n" +
 			"3. 替换二进制文件\n\n" +
 			"4. 重新启动程序"
@@ -630,7 +630,7 @@ func (h *VersionHandler) detectDeploymentMethod() DeploymentInfo {
 		"   docker restart <容器名称>\n\n" +
 		"2. 二进制部署：\n" +
 		"   从 GitHub 下载最新版本并替换文件\n" +
-		"   https://github.com/NodePassProject/NodePassDash/releases/latest"
+		"   https://github.com/lima-droid/NB-Panel/releases/latest"
 
 	return DeploymentInfo{
 		Method:        "unknown",
@@ -836,14 +836,14 @@ func (h *VersionHandler) getBinaryDownloadURL(version string) string {
 	case "linux":
 		switch runtime.GOARCH {
 		case "amd64", "arm64", "arm":
-			filename = fmt.Sprintf("NodePassDash_Linux_%s.tar.gz", archName)
+			filename = fmt.Sprintf("NB-Panel_Linux_%s.tar.gz", archName)
 		default:
 			return ""
 		}
 	case "windows":
 		switch runtime.GOARCH {
 		case "amd64", "386":
-			filename = fmt.Sprintf("NodePassDash_Windows_%s.zip", archName)
+			filename = fmt.Sprintf("NB-Panel_Windows_%s.zip", archName)
 		default:
 			return ""
 		}
@@ -851,7 +851,7 @@ func (h *VersionHandler) getBinaryDownloadURL(version string) string {
 		return ""
 	}
 
-	return fmt.Sprintf("https://github.com/NodePassProject/NodePassDash/releases/download/%s/%s", version, filename)
+	return fmt.Sprintf("https://github.com/lima-droid/NB-Panel/releases/download/%s/%s", version, filename)
 }
 
 // downloadFile 下载文件（带进度）
@@ -951,7 +951,7 @@ func (h *VersionHandler) downloadWithProgress(src io.Reader, dst io.Writer, tota
 
 // getLatestRelease 从 GitHub API 获取最新发布信息
 func (h *VersionHandler) getLatestRelease() (*GitHubRelease, error) {
-	url := "https://api.github.com/repos/NodePassProject/NodePassDash/releases/latest"
+	url := "https://api.github.com/repos/lima-droid/NB-Panel/releases/latest"
 
 	client := &http.Client{
 		Timeout: 10 * time.Second,
@@ -1016,7 +1016,7 @@ func (h *VersionHandler) HandleGetReleaseHistory(c *gin.Context) {
 
 // getReleaseHistory 从 GitHub API 获取版本发布历史
 func (h *VersionHandler) getReleaseHistory() ([]GitHubRelease, error) {
-	url := "https://api.github.com/repos/NodePassProject/NodePassDash/releases?per_page=10"
+	url := "https://api.github.com/repos/lima-droid/NB-Panel/releases?per_page=10"
 
 	client := &http.Client{
 		Timeout: 10 * time.Second,

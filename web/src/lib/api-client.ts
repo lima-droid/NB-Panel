@@ -7,7 +7,7 @@ import { buildApiUrl } from "./utils";
 // 获取 token
 function getToken(): string | null {
   if (typeof window !== "undefined") {
-    return localStorage.getItem("nodepass.token");
+    return localStorage.getItem("nb-panel.token");
   }
   return null;
 }
@@ -53,9 +53,9 @@ export async function apiFetch(
   if (response.status === 401 && !skipAuth) {
     console.warn("🚨 Token 已过期或无效，清除本地存储");
     if (typeof window !== "undefined") {
-      localStorage.removeItem("nodepass.token");
-      localStorage.removeItem("nodepass.tokenExpiresAt");
-      localStorage.removeItem("nodepass.user");
+      localStorage.removeItem("nb-panel.token");
+      localStorage.removeItem("nb-panel.tokenExpiresAt");
+      localStorage.removeItem("nb-panel.user");
     }
     // 重定向到登录页（可选）
     // window.location.href = "/login";

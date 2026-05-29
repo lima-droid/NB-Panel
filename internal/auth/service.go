@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"NodePassDash/internal/models"
+	"NB-Panel/internal/models"
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"

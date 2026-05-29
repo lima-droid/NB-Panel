@@ -118,7 +118,7 @@ export default function SSEDebugPage() {
     return endpointObj;
   }, [endpointDetail?.url, endpointDetail?.apiPath, endpointDetail?.apiKey]);
 
-  // NodePass SSE监听 - 手动模式
+  // NB面板 SSE监听 - 手动模式
   const { isConnected, isConnecting, error, connect, disconnect, reconnect } =
     useNodePassSSE(endpoint, {
       autoReconnect: false, // 禁用自动重连，手动控制

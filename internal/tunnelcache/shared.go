@@ -1,8 +1,8 @@
 package tunnelcache
 
 import (
-	log "NodePassDash/internal/log"
-	"NodePassDash/internal/models"
+	log "NB-Panel/internal/log"
+	"NB-Panel/internal/models"
 	"fmt"
 	"sort"
 	"sync"

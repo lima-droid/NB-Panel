@@ -142,7 +142,7 @@
     "batchRestartCompleteDesc": "成功重启 {{success}} 个实例{{failed}}",
     "failedCount": "，{{count}} 个失败",
     "unknownError": "未知错误",
-    "missingInstanceId": "此实例缺少NodePass ID，无法执行操作",
+    "missingInstanceId": "此实例缺少NB面板 ID，无法执行操作",
     "copySuccess": "配置已复制到剪贴板"
   },
   "mobile": {

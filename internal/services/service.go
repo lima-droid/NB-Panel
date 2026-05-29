@@ -1,11 +1,11 @@
 package services
 
 import (
-	log "NodePassDash/internal/log"
-	"NodePassDash/internal/models"
-	"NodePassDash/internal/nodepass"
-	"NodePassDash/internal/sse"
-	"NodePassDash/internal/tunnel"
+	log "NB-Panel/internal/log"
+	"NB-Panel/internal/models"
+	"NB-Panel/internal/nodepass"
+	"NB-Panel/internal/sse"
+	"NB-Panel/internal/tunnel"
 	"encoding/json"
 	"fmt"
 	"strings"

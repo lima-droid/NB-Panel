@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"NodePassDash/internal/auth"
+	"NB-Panel/internal/auth"
 
 	"github.com/gin-gonic/gin"
 )

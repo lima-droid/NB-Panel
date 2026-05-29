@@ -253,7 +253,7 @@ export default function SetupGuidePage() {
 
     try {
       // 1. 获取当前 token（用于认证）
-      const token = localStorage.getItem("nodepass.token");
+      const token = localStorage.getItem("nb-panel.token");
       if (!token) {
         setError("未登录，请先登录");
         setIsLoading(false);
@@ -292,7 +292,7 @@ export default function SetupGuidePage() {
           // 保存新用户信息到 localStorage
           const user = { username: result.username };
           if (typeof window !== "undefined") {
-            localStorage.setItem("nodepass.user", JSON.stringify(user));
+            localStorage.setItem("nb-panel.user", JSON.stringify(user));
           }
 
           // 更新 AuthProvider 的用户状态

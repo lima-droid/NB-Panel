@@ -1,7 +1,7 @@
 package api
 
 import (
-	"NodePassDash/internal/dashboard"
+	"NB-Panel/internal/dashboard"
 	"net/http"
 	"strconv"
 

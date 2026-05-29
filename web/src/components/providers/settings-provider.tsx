@@ -47,7 +47,7 @@ const SettingsContext = createContext<SettingsContextType | undefined>(
 );
 
 // 本地存储键名
-const SETTINGS_STORAGE_KEY = "nodepass-settings";
+const SETTINGS_STORAGE_KEY = "nb-panel-settings";
 
 // 设置提供者组件
 export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({

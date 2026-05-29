@@ -1,10 +1,10 @@
 package sse
 
 import (
-	"NodePassDash/internal/endpoint"
-	log "NodePassDash/internal/log"
-	"NodePassDash/internal/models"
-	"NodePassDash/internal/nodepass"
+	"NB-Panel/internal/endpoint"
+	log "NB-Panel/internal/log"
+	"NB-Panel/internal/models"
+	"NB-Panel/internal/nodepass"
 	"context"
 	"encoding/json"
 	"fmt"

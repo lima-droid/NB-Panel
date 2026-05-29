@@ -40,7 +40,7 @@ export default function OAuthSuccessPage() {
       // 保存用户信息
       const user = { username };
       setUserDirectly(user);
-      localStorage.setItem("nodepass.user", JSON.stringify(user));
+      localStorage.setItem("nb-panel.user", JSON.stringify(user));
 
       console.log("✅ Token 和用户信息已保存，即将跳转到仪表盘");
 

@@ -1,7 +1,7 @@
 package nodepass
 
 import (
-	"NodePassDash/internal/models"
+	"NB-Panel/internal/models"
 	"encoding/json"
 	"fmt"
 	"net/url"

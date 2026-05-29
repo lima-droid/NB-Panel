@@ -127,7 +127,7 @@ export default function LoginPage() {
         const loginUser = { username: formData.username };
 
         // 先保存到localStorage，再设置状态
-        localStorage.setItem("nodepass.user", JSON.stringify(loginUser));
+        localStorage.setItem("nb-panel.user", JSON.stringify(loginUser));
         setUserDirectly(loginUser);
 
         // 检查是否是默认凭据
@@ -196,7 +196,7 @@ export default function LoginPage() {
                 {/* 根据主题动态渲染 Logo */}
                 <Image
                   priority
-                  alt="NodePassDash Logo"
+                  alt="NB面板 Logo"
                   height={64}
                   src={logoSrc}
                   width={64}

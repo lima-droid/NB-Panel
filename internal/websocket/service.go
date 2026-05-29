@@ -8,8 +8,8 @@ import (
 	"sync"
 	"time"
 
-	log "NodePassDash/internal/log"
-	"NodePassDash/internal/nodepass"
+	log "NB-Panel/internal/log"
+	"NB-Panel/internal/nodepass"
 
 	"github.com/gorilla/websocket"
 )

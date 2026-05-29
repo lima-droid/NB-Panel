@@ -1,7 +1,7 @@
 package tunnel
 
 import (
-	"NodePassDash/internal/models"
+	"NB-Panel/internal/models"
 )
 
 // 使用统一模型定义

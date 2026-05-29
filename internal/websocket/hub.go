@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
-	log "NodePassDash/internal/log"
+	log "NB-Panel/internal/log"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )

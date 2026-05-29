@@ -3,8 +3,8 @@ package api
 import (
 	"net/http"
 
-	log "NodePassDash/internal/log"
-	"NodePassDash/internal/websocket"
+	log "NB-Panel/internal/log"
+	"NB-Panel/internal/websocket"
 
 	"github.com/gin-gonic/gin"
 	gorillaWebsocket "github.com/gorilla/websocket"

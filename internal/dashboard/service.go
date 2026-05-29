@@ -1,7 +1,7 @@
 package dashboard
 
 import (
-	"NodePassDash/internal/models"
+	"NB-Panel/internal/models"
 	"fmt"
 	"sort"
 	"strings"

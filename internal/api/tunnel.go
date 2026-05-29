@@ -1,12 +1,12 @@
 package api
 
 import (
-	log "NodePassDash/internal/log"
-	"NodePassDash/internal/metrics"
-	"NodePassDash/internal/models"
-	"NodePassDash/internal/nodepass"
-	"NodePassDash/internal/sse"
-	"NodePassDash/internal/tunnel"
+	log "NB-Panel/internal/log"
+	"NB-Panel/internal/metrics"
+	"NB-Panel/internal/models"
+	"NB-Panel/internal/nodepass"
+	"NB-Panel/internal/sse"
+	"NB-Panel/internal/tunnel"
 	"archive/zip"
 	"bytes"
 	"database/sql"
@@ -3241,7 +3241,7 @@ func (h *TunnelHandler) HandleUpdateInstanceTags(c *gin.Context) {
 		return
 	}
 
-	// 调用NodePass API更新标签
+	// 调用NB面板 API更新标签
 	result, err := nodepass.UpdateInstanceTags(endpointID, instanceID, requestData)
 	if err != nil {
 		log.Errorf("[API]更新标签失败: tunnelID=%d, instanceID=%s, err=%v", tunnelID, instanceID, err)

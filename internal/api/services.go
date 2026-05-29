@@ -1,8 +1,8 @@
 package api
 
 import (
-	"NodePassDash/internal/services"
-	"NodePassDash/internal/tunnel"
+	"NB-Panel/internal/services"
+	"NB-Panel/internal/tunnel"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
