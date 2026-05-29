@@ -11,14 +11,26 @@ NC='\033[0m'
 
 # NB面板 配置
 GITHUB_REPO="lima-droid/NB-Panel"
-NPD_DOWNLOAD_URL="https://github.com/${GITHUB_REPO}/releases/latest/download/NB-Panel_Linux_x86_64.tar.gz"
 NPD_LOCAL_DIR="/root/npmb"
-NPD_LOCAL_TARGZ="${NPD_LOCAL_DIR}/NB-Panel_Linux_x86_64.tar.gz"
 NPD_BINARY_NAME="nodepassdash"
 NPD_INSTALL_DIR="/opt/nodepassdash"
 NPD_USER_NAME="nodepass"
 NPD_SERVICE_NAME="nodepassdash"
 NPD_DEFAULT_PORT="4000"
+
+# 自动架构检测
+detect_arch() {
+  local arch=$(uname -m)
+  case "$arch" in
+    x86_64|amd64) echo "Linux_x86_64" ;;
+    aarch64|arm64) echo "Linux_arm64" ;;
+    armv7l|armv6l)  echo "Linux_armv7" ;;
+    *) error "不支持的架构: $arch" ;;
+  esac
+}
+NPD_ARCH=$(detect_arch)
+NPD_DOWNLOAD_URL="https://raw.githubusercontent.com/${GITHUB_REPO}/main/releases/NB-Panel_${NPD_ARCH}.tar.gz"
+NPD_LOCAL_TARGZ="${NPD_LOCAL_DIR}/NB-Panel_${NPD_ARCH}.tar.gz"
 
 # 通用函数
 info() { echo -e "${GREEN}[✓]${NC} $*"; }
