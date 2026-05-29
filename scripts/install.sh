@@ -11,7 +11,7 @@ NC='\033[0m'
 
 # NB面板 配置
 GITHUB_REPO="lima-droid/NB-Panel"
-NPD_DOWNLOAD_URL="https://raw.githubusercontent.com/${GITHUB_REPO}/main/releases/NB-Panel_Linux_x86_64.tar.gz"
+NPD_DOWNLOAD_URL="https://github.com/${GITHUB_REPO}/releases/latest/download/NB-Panel_Linux_x86_64.tar.gz"
 NPD_LOCAL_DIR="/root/npmb"
 NPD_LOCAL_TARGZ="${NPD_LOCAL_DIR}/NB-Panel_Linux_x86_64.tar.gz"
 NPD_BINARY_NAME="nodepassdash"
