@@ -59,7 +59,7 @@ You can pass configuration either as CLI flags (recommended) or via environment 
 
 ### Ports
 
-- Default port: `3000`
+- Default port: `4000`
 - CLI: `./nb-panel --port 8080`
 - Env: `PORT=8080`
 
@@ -116,6 +116,6 @@ If you pin to a version tag, update the tag in `docker-compose.yml` first.
 
 ## Troubleshooting
 
-- Check health: `curl -fsS http://localhost:3000/api/health`
+- Check health: `curl -fsS http://localhost:4000/api/health`
 - View logs: `docker logs -f nb-panel`
 - Reset admin password (requires restart after): `docker exec -it nb-panel ./nb-panel --resetpwd`
