@@ -1,0 +1,42 @@
+# 编译产物
+cmd/server/dist/
+web/dist/
+*.exe
+nbclientdash
+
+# Go
+vendor/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 系统
+.DS_Store
+Thumbs.db
+
+# 环境变量（防止泄露密钥）
+.env
+
+# 数据库
+*.db
+*.db-shm
+*.db-wal
+
+# 密钥和证书
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# 日志
+*.log
+
+# 本地配置
+config.local.*
+node_modules/
+
+
