@@ -110,7 +110,6 @@ BSD-3-Clause · 详见 [LICENSE](LICENSE)
 ## 📬 联系方式
 
 - [GitHub Issues](https://github.com/lima-droid/NB-Panel/issues)
-- [Telegram 群组](https://t.me/NBPanel)
 - [@CubeMihomo](https://t.me/CubeMihomo)
 
 ---
