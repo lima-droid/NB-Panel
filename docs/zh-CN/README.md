@@ -1,27 +1,27 @@
 <div align="center">
-  <img src="docs/nb-panel-logo.png" alt="NB-Panel" height="100">
+  <img src="../nb-panel-logo.svg" alt="NB面板" height="80">
   <h1>NB-Panel</h1>
   <p><strong>轻量级隧道管理面板 · 单二进制 · 开箱即用</strong></p>
   <p>
     <a href="https://github.com/lima-droid/NB-Panel/releases">
-      <img src="https://img.shields.io/github/v/release/lima-droid/NB-Panel?style=flat-square&label=Version&color=2496ed" alt="Release">
+      <img src="https://img.shields.io/github/v/release/lima-droid/NB-Panel?style=flat-square&label=版本&color=2496ed" alt="Release">
     </a>
     <a href="https://github.com/lima-droid/NB-Panel">
-      <img src="https://img.shields.io/github/stars/lima-droid/NB-Panel?style=flat-square&label=Stars&color=ffc107" alt="Stars">
+      <img src="https://img.shields.io/github/stars/lima-droid/NB-Panel?style=flat-square&label=星标&color=ffc107" alt="Stars">
     </a>
     <a href="https://github.com/lima-droid/NB-Panel/blob/main/LICENSE">
-      <img src="https://img.shields.io/github/license/lima-droid/NB-Panel?style=flat-square&label=License&color=success" alt="License">
+      <img src="https://img.shields.io/github/license/lima-droid/NB-Panel?style=flat-square&label=许可&color=success" alt="License">
     </a>
-    <img src="https://img.shields.io/badge/Build-passing-ff69b4?style=flat-square" alt="Build">
+    <img src="https://img.shields.io/badge/构建-passing-ff69b4?style=flat-square" alt="Build">
     <a href="https://github.com/lima-droid/NB-Panel">
-      <img src="https://img.shields.io/github/last-commit/lima-droid/NB-Panel?style=flat-square&label=Updated&color=blueviolet" alt="Last Commit">
+      <img src="https://img.shields.io/github/last-commit/lima-droid/NB-Panel?style=flat-square&label=更新&color=blueviolet" alt="Last Commit">
     </a>
     <a href="https://t.me/NBPanel">
       <img src="https://img.shields.io/badge/Telegram-NBPanel-26A5E4?style=flat-square&logo=telegram" alt="Telegram">
     </a>
   </p>
   <p>
-    <b>English</b> · <a href="docs/zh-CN/README.md">简体中文</a>
+    <b>简体中文</b> · <a href="../../README.md">English</a>
   </p>
 </div>
 
@@ -115,6 +115,6 @@ BSD-3-Clause · 详见 [LICENSE](LICENSE)
 
 ---
 
-## ⭐ Stargazers
+## ⭐ Star历史
 
 [![Stargazers](https://img.shields.io/github/stars/lima-droid/NB-Panel?style=for-the-badge&logo=github&color=gold)](https://github.com/lima-droid/NB-Panel)
