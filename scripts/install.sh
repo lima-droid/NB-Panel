@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 #
-# NB-Panel Installer
+# NB-Panel Installer (FIXED)
 # https://github.com/lima-droid/NB-Panel
+# 修复: HTTPS 证书路径用副本而非原始路径，修复 nodepass 用户权限问题
 #
 set -eE
 trap 'echo "安装中断，行号: $LINENO"; exit 1' ERR
@@ -12,7 +13,7 @@ BINARY_NAME="nodepassdash"
 SERVICE_NAME="nodepassdash"
 DOCKER_IMAGE="ghcr.io/lima-droid/nb-panel:latest"
 
-# Colors - 只使用简单颜色，不添加任何符号
+# Colors
 ESC=$(printf '\033')
 R="${ESC}[31m"
 G="${ESC}[32m"
@@ -21,7 +22,6 @@ C="${ESC}[36m"
 B="${ESC}[1m"
 N="${ESC}[0m"
 
-# 纯文本消息函数 - 没有任何符号
 msg()   { echo -e " ${B}${C}>>${N}${B} $*${N}"; }
 ok()    { echo -e " ${G}OK${N} $*"; }
 warn()  { echo -e " ${Y}!!${N} $*"; }
@@ -83,7 +83,8 @@ install_binary() {
     readp "TLS 私钥路径: " key_path
     [[ -f "$cert_path" ]] || err "证书文件不存在: $cert_path"
     [[ -f "$key_path" ]] || err "私钥文件不存在: $key_path"
-    tls_args=" --cert $cert_path --key $key_path"
+    # ====== FIX: 复制到 certs/ 目录后用副本路径 ======
+    tls_args=" --cert $INSTALL_DIR/certs/server.crt --key $INSTALL_DIR/certs/server.key"
   fi
 
   echo
@@ -108,15 +109,18 @@ install_binary() {
   printf "DB_PATH=%s/db/database.db\n" "$INSTALL_DIR" >> "$INSTALL_DIR/config.env"
 
   if [[ "$https" =~ ^[Yy]$ ]]; then
-    mkdir -p "$INSTALL_DIR/certs"
+    msg "安装证书..."
     cp "$cert_path" "$INSTALL_DIR/certs/server.crt"
     cp "$key_path" "$INSTALL_DIR/certs/server.key"
     chmod 600 "$INSTALL_DIR/certs/server.key"
+    chmod 644 "$INSTALL_DIR/certs/server.crt"
+    # ====== FIX: nodepass 用户必须能读证书 ======
+    chown nodepass:nodepass "$INSTALL_DIR/certs/server.crt" "$INSTALL_DIR/certs/server.key"
     printf "CERT_PATH=%s/certs/server.crt\n" "$INSTALL_DIR" >> "$INSTALL_DIR/config.env"
     printf "KEY_PATH=%s/certs/server.key\n" "$INSTALL_DIR" >> "$INSTALL_DIR/config.env"
   fi
 
-  chown -R nodepass:nodepass "$INSTALL_DIR/db" "$INSTALL_DIR/logs" "$INSTALL_DIR/certs" 2>/dev/null 
+  chown -R nodepass:nodepass "$INSTALL_DIR/db" "$INSTALL_DIR/logs" "$INSTALL_DIR/certs" 2>/dev/null
 
   msg "注册 systemd 服务..."
   cat > /etc/systemd/system/$SERVICE_NAME.service <<EOF
@@ -149,7 +153,7 @@ EOF
   echo
   sep
   echo -e " ${G}安装完成${N}"
-  sep 
+  sep
   echo -e "   账号:    nbpanel / Np123456"
   echo -e "   路径:    $INSTALL_DIR/bin/$BINARY_NAME"
   echo -e "   配置:    $INSTALL_DIR/config.env"
@@ -408,4 +412,3 @@ main() {
 }
 
 main "$@"
-
