@@ -118,3 +118,4 @@ BSD-3-Clause · 详见 [LICENSE](LICENSE)
 ## ⭐ Star历史
 
 [![Stargazers](https://img.shields.io/github/stars/lima-droid/NB-Panel?style=for-the-badge&logo=github&color=gold)](https://github.com/lima-droid/NB-Panel)
+
