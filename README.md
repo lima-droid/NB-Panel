@@ -17,8 +17,6 @@
       <img src="https://img.shields.io/github/last-commit/lima-droid/NB-Panel?style=flat-square&label=Updated&color=blueviolet" alt="Last Commit">
     </a>
     <a href="https://t.me/NBPanel">
-      <img src="https://img.shields.io/badge/Telegram-NBPanel-26A5E4?style=flat-square&logo=telegram" alt="Telegram">
-    </a>
   </p>
   <p>
     <b>English</b> · <a href="docs/zh-CN/README.md">简体中文</a>
