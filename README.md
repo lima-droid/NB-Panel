@@ -107,11 +107,6 @@ BSD-3-Clause · 详见 [LICENSE](LICENSE)
 
 本项目按"现状"提供，不含任何明示或暗示的担保。使用者须遵守当地法律法规并仅用于合法目的。作者不对任何直接、间接、偶发或后果性损害承担责任。
 
-## 📬 联系方式
-
-- [GitHub Issues](https://github.com/lima-droid/NB-Panel/issues)
-- [@CubeMihomo](https://t.me/CubeMihomo)
-
 ---
 
 ## ⭐ Stargazers
