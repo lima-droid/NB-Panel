@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 #
-# NB-Panel Installer (FIXED)
+# NB-Panel Installer
 # https://github.com/lima-droid/NB-Panel
-# 修复: HTTPS 证书路径用副本而非原始路径，修复 nodepass 用户权限问题
 #
 set -eE
 trap 'echo "安装中断，行号: $LINENO"; exit 1' ERR
@@ -44,14 +43,15 @@ detect_arch() {
 }
 
 download_binary() {
-  local url="https://github.com/lima-droid/NB-Panel/releases/latest/download/NB-Panel_$(detect_arch).tar.gz"
+  local arch
+  arch="$(detect_arch)"
   dest="/tmp/nbpanel.tar.gz"
-  msg "下载 NB-Panel..."
+  msg "下载 NB-Panel (${arch})..."
 
   if command -v curl &>/dev/null; then
-    curl -#L -o "$dest" "$url" || err "下载失败"
+    curl -#L -o "$dest" "https://github.com/lima-droid/NB-Panel/raw/main/releases/${arch}.tar.gz" || err "下载失败"
   else
-    wget --show-progress -qO "$dest" "$url" || err "下载失败"
+    wget --show-progress -qO "$dest" "https://github.com/lima-droid/NB-Panel/raw/main/releases/${arch}.tar.gz" || err "下载失败"
   fi
 }
 
@@ -83,7 +83,6 @@ install_binary() {
     readp "TLS 私钥路径: " key_path
     [[ -f "$cert_path" ]] || err "证书文件不存在: $cert_path"
     [[ -f "$key_path" ]] || err "私钥文件不存在: $key_path"
-    # ====== FIX: 复制到 certs/ 目录后用副本路径 ======
     tls_args=" --cert $INSTALL_DIR/certs/server.crt --key $INSTALL_DIR/certs/server.key"
   fi
 
@@ -114,7 +113,6 @@ install_binary() {
     cp "$key_path" "$INSTALL_DIR/certs/server.key"
     chmod 600 "$INSTALL_DIR/certs/server.key"
     chmod 644 "$INSTALL_DIR/certs/server.crt"
-    # ====== FIX: nodepass 用户必须能读证书 ======
     chown nodepass:nodepass "$INSTALL_DIR/certs/server.crt" "$INSTALL_DIR/certs/server.key"
     printf "CERT_PATH=%s/certs/server.crt\n" "$INSTALL_DIR" >> "$INSTALL_DIR/config.env"
     printf "KEY_PATH=%s/certs/server.key\n" "$INSTALL_DIR" >> "$INSTALL_DIR/config.env"
@@ -234,7 +232,7 @@ uninstall_binary() {
 }
 
 uninstall_docker() {
-  docker ps -a --format '{{.Names}}' | grep -q "^${SERVICE_NAME}$" || { warn "Docker 版未安装"; return; }
+  docker ps -a --format '{{.Names}}' | grep -q "^${SERVICE_NAME}$" 2>/dev/null || { warn "Docker 版未安装"; return; }
   readp "确认卸载? [y/N]: " ok
   [[ "$ok" =~ ^[Yy]$ ]] || return
   docker stop "$SERVICE_NAME" 2>/dev/null || true
@@ -299,11 +297,39 @@ show_status() {
   echo
 }
 
+# ---------- Upgrade ----------
+upgrade_binary() {
+  msg "二进制升级中..."
+  systemctl stop $SERVICE_NAME 2>/dev/null || true
+  download_binary
+  rm -rf /tmp/nbpanel_install && mkdir /tmp/nbpanel_install
+  tar -xzf "$dest" -C /tmp/nbpanel_install || err "解压失败"
+  local binary=$(find /tmp/nbpanel_install -name "$BINARY_NAME" -type f | head -1)
+  [[ -n "$binary" ]] || err "未找到二进制文件"
+  cp "$binary" "$INSTALL_DIR/bin/$BINARY_NAME" && chmod 755 "$INSTALL_DIR/bin/$BINARY_NAME"
+  systemctl start $SERVICE_NAME && ok "二进制升级完成"
+  rm -rf /tmp/nbpanel_install /tmp/nbpanel.tar.gz
+}
+
+upgrade_docker() {
+  msg "Docker 升级中..."
+  local pd dd
+  pd=$(docker port "$SERVICE_NAME" 2>/dev/null | head -1 | sed 's/.*://')
+  dd=$(docker inspect "$SERVICE_NAME" 2>/dev/null | grep '"Source"' | sed 's/.*"Source": "//;s/".*//' | grep nbpanel-data | head -1)
+  pd="${pd:-4000}"; dd="${dd:-$(pwd)/nbpanel-data}"
+  docker stop "$SERVICE_NAME" 2>/dev/null; docker rm "$SERVICE_NAME" 2>/dev/null
+  docker pull "$DOCKER_IMAGE"
+  mkdir -p "$dd"/{logs,public,db} && chmod 777 "$dd"/{logs,public,db}
+  docker run -d --name "$SERVICE_NAME" --restart=always -p "${pd}:4000" -e PORT=4000 \
+    -v "$dd/logs:/app/logs" -v "$dd/db:/app/db" -v "$dd/public:/app/public" \
+    "$DOCKER_IMAGE" && ok "Docker 升级完成"
+}
+
 # ---------- Main Menu ----------
 main_menu() {
   echo
   echo -e " ${B}${C}----------------------------------------${N}"
-  echo -e " ${B}${C}     NB-Panel 管理脚本 v${VERSION}${N}"
+  echo -e " ${B}${C}     NB-Panel 管理脚本${N}"
   echo -e " ${B}${C}  github.com/lima-droid/NB-Panel${N}"
   echo -e " ${B}${C}----------------------------------------${N}"
   echo
@@ -345,25 +371,9 @@ main_menu() {
     3)
       echo
       if docker ps -a --format '{{.Names}}' | grep -q "^${SERVICE_NAME}$" 2>/dev/null; then
-        msg "Docker 升级中..."
-        local pd dd
-        pd=$(docker port "$SERVICE_NAME" 2>/dev/null | head -1 | sed 's/.*://')
-        dd=$(docker inspect "$SERVICE_NAME" 2>/dev/null | grep '"Source"' | sed 's/.*"Source": "//;s/".*//' | grep nbpanel-data | head -1)
-        pd="${pd:-4000}"; dd="${dd:-$(pwd)/nbpanel-data}"
-        docker stop "$SERVICE_NAME" 2>/dev/null; docker rm "$SERVICE_NAME" 2>/dev/null
-        docker pull "$DOCKER_IMAGE"
-        mkdir -p "$dd"/{logs,public,db} && chmod 777 "$dd"/{logs,public,db}
-        docker run -d --name "$SERVICE_NAME" --restart=always -p "${pd}:4000" -e PORT=4000 -v "$dd/logs:/app/logs" -v "$dd/db:/app/db" -v "$dd/public:/app/public" "$DOCKER_IMAGE" && ok "Docker 升级完成"
+        upgrade_docker
       elif [[ -f "$INSTALL_DIR/bin/$BINARY_NAME" ]]; then
-        msg "二进制升级中..."
-        systemctl stop $SERVICE_NAME 2>/dev/null
-        download_binary
-        rm -rf /tmp/nbpanel_install && mkdir /tmp/nbpanel_install
-        tar -xzf "$dest" -C /tmp/nbpanel_install || err "解压失败"
-        local binary=$(find /tmp/nbpanel_install -name "$BINARY_NAME" -type f | head -1)
-        cp "$binary" "$INSTALL_DIR/bin/$BINARY_NAME" && chmod 755 "$INSTALL_DIR/bin/$BINARY_NAME"
-        systemctl start $SERVICE_NAME && ok "二进制升级完成"
-        rm -rf /tmp/nbpanel_install
+        upgrade_binary
       else
         warn "未检测到已安装的 NB-Panel"
       fi
@@ -412,4 +422,3 @@ main() {
 }
 
 main "$@"
-
