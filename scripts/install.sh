@@ -119,6 +119,7 @@ install_binary() {
   fi
 
   chown -R nodepass:nodepass "$INSTALL_DIR/db" "$INSTALL_DIR/logs" "$INSTALL_DIR/certs" 2>/dev/null
+  chown nodepass:nodepass "$INSTALL_DIR" "$INSTALL_DIR/config.env" 2>/dev/null
 
   msg "注册 systemd 服务..."
   cat > /etc/systemd/system/$SERVICE_NAME.service <<EOF
