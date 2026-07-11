@@ -241,9 +241,15 @@ uninstall_binary() {
   systemctl disable $SERVICE_NAME 2>/dev/null
   rm -f /etc/systemd/system/$SERVICE_NAME.service
   systemctl daemon-reload
+  systemctl reset-failed 2>/dev/null
   rm -rf "$INSTALL_DIR"
   rm -f /usr/local/bin/$BINARY_NAME
-  ok "二进制版已卸载"
+  rm -f /usr/local/bin/nodepassdash-ctl
+  # 删除用户
+  if id nodepass &>/dev/null; then
+    userdel nodepass 2>/dev/null || true
+  fi
+  ok "二进制版已完全卸载（包括用户和所有遗留文件）"
 }
 
 uninstall_docker() {
