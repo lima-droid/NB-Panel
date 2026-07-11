@@ -1,16 +1,20 @@
 #!/usr/bin/env bash
 #
-# NB-Panel Installer
-# https://github.com/lima-droid/NB-Panel
+# NB-Panel / NodePassDash Installer
+# 修改版 by 小傻逼
+# GitHub: https://github.com/lima-droid/NB-Panel → https://github.com/NodePassProject/NodePassDash
 #
 set -eE
 trap 'echo "安装中断，行号: $LINENO"; exit 1' ERR
 
-VERSION="3.4.4"
+# ---- 修改点：版本自动获取最新，仓库改为 NodePassProject/NodePassDash ----
+REPO_OWNER="NodePassProject"
+REPO_NAME="NodePassDash"
+DOCKER_IMAGE="ghcr.io/${REPO_OWNER}/${REPO_NAME}:latest"
+
 INSTALL_DIR="/opt/nodepassdash"
 BINARY_NAME="nodepassdash"
 SERVICE_NAME="nodepassdash"
-DOCKER_IMAGE="ghcr.io/lima-droid/nb-panel:latest"
 
 # Colors
 ESC=$(printf '\033')
@@ -37,21 +41,40 @@ detect_arch() {
   case "$(uname -m)" in
     x86_64|amd64) echo "Linux_x86_64" ;;
     aarch64|arm64) echo "Linux_arm64" ;;
-    armv7l) echo "Linux_armv7" ;;
+    armv7l) echo "Linux_armv7hf" ;;
     *) err "不支持的架构: $(uname -m)" ;;
   esac
+}
+
+get_latest_version() {
+  # 从 GitHub API 获取最新 release tag
+  local api_url="https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/releases/latest"
+  VERSION=$(curl -sL "$api_url" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+  if [[ -z "$VERSION" ]]; then
+    err "获取最新版本失败，请检查网络或 GitHub API 限制"
+  fi
+  msg "获取到最新版本: ${VERSION}"
 }
 
 download_binary() {
   local arch
   arch="$(detect_arch)"
   dest="/tmp/nbpanel.tar.gz"
-  msg "下载 NB-Panel (${arch})..."
+
+  # 构建正确的下载 URL: Release 下载
+  local url="https://github.com/${REPO_OWNER}/${REPO_NAME}/releases/download/${VERSION}/${REPO_NAME}_${arch}.tar.gz"
+  msg "下载 ${REPO_NAME} ${VERSION} (${arch})..."
+  msg "下载地址: ${url}"
 
   if command -v curl &>/dev/null; then
-    curl -#L -o "$dest" "https://github.com/lima-droid/NB-Panel/raw/main/releases/${arch}.tar.gz" || err "下载失败"
+    curl -#L -o "$dest" "$url" || err "下载失败"
   else
-    wget --show-progress -qO "$dest" "https://github.com/lima-droid/NB-Panel/raw/main/releases/${arch}.tar.gz" || err "下载失败"
+    wget --show-progress -qO "$dest" "$url" || err "下载失败"
+  fi
+
+  # 验证下载的是 gzip 而非 HTML
+  if file "$dest" | grep -q "HTML"; then
+    err "下载返回 HTML（可能是版本/架构不存在），请检查版本号: ${VERSION}, 架构: ${arch}"
   fi
 }
 
@@ -59,6 +82,7 @@ install_binary() {
   local dest_port ip_addr cert_path key_path tls_args
   dest="/tmp/nbpanel.tar.gz"
 
+  get_latest_version
   download_binary
 
   msg "解压安装包..."
@@ -71,7 +95,7 @@ install_binary() {
 
   echo
   sep
-  echo -e " ${B}二进制安装${N}"
+  echo -e " ${B}二进制安装 - ${REPO_NAME} ${VERSION}${N}"
   sep
 
   readp "监听端口 [4000]: " dest_port
@@ -124,7 +148,7 @@ install_binary() {
   msg "注册 systemd 服务..."
   cat > /etc/systemd/system/$SERVICE_NAME.service <<EOF
 [Unit]
-Description=NB-Panel
+Description=${REPO_NAME} - ${REPO_OWNER}/${REPO_NAME}
 After=network.target
 
 [Service]
@@ -153,10 +177,11 @@ EOF
   sep
   echo -e " ${G}安装完成${N}"
   sep
-  echo -e "   账号:    nbpanel / Np123456"
+  echo -e "   版本:    ${VERSION}"
   echo -e "   路径:    $INSTALL_DIR/bin/$BINARY_NAME"
   echo -e "   配置:    $INSTALL_DIR/config.env"
   echo -e "   URL:     ${C}${proto}://${ip_addr}:${dest_port}${N}"
+  echo -e "   默认账号: 首次启动会在日志中显示设置引导"
   sep
   echo
 }
@@ -211,7 +236,6 @@ install_docker() {
   sep
   echo -e " ${G}安装完成${N}"
   sep
-  echo -e "   账号:    nbpanel / Np123456"
   echo -e "   数据:    ${data_dir}"
   echo -e "   URL:     ${C}http://${ip_addr}:${port_host}${N}"
   sep
@@ -278,6 +302,9 @@ show_status() {
     else
       echo "    状态: 已停止"
     fi
+    # 显示版本
+    local ver=$(grep ^VERSION= "$INSTALL_DIR/config.env" 2>/dev/null | cut -d= -f2)
+    [[ -n "$ver" ]] && echo "    版本: ${ver}"
   else
     echo "    未安装"
   fi
@@ -302,13 +329,16 @@ show_status() {
 upgrade_binary() {
   msg "二进制升级中..."
   systemctl stop $SERVICE_NAME 2>/dev/null || true
+  get_latest_version
   download_binary
   rm -rf /tmp/nbpanel_install && mkdir /tmp/nbpanel_install
   tar -xzf "$dest" -C /tmp/nbpanel_install || err "解压失败"
   local binary=$(find /tmp/nbpanel_install -name "$BINARY_NAME" -type f | head -1)
   [[ -n "$binary" ]] || err "未找到二进制文件"
   cp "$binary" "$INSTALL_DIR/bin/$BINARY_NAME" && chmod 755 "$INSTALL_DIR/bin/$BINARY_NAME"
-  systemctl start $SERVICE_NAME && ok "二进制升级完成"
+  # 更新配置中的版本号
+  sed -i "s/^VERSION=.*/VERSION=${VERSION}/" "$INSTALL_DIR/config.env" 2>/dev/null || true
+  systemctl start $SERVICE_NAME && ok "二进制升级完成 (${VERSION})"
   rm -rf /tmp/nbpanel_install /tmp/nbpanel.tar.gz
 }
 
@@ -330,8 +360,8 @@ upgrade_docker() {
 main_menu() {
   echo
   echo -e " ${B}${C}----------------------------------------${N}"
-  echo -e " ${B}${C}     NB-Panel 管理脚本${N}"
-  echo -e " ${B}${C}  github.com/lima-droid/NB-Panel${N}"
+  echo -e " ${B}${C}     NodePassDash 管理脚本${N}"
+  echo -e " ${B}${C}  github.com/${REPO_OWNER}/${REPO_NAME}${N}"
   echo -e " ${B}${C}----------------------------------------${N}"
   echo
   echo "    1. 安装"
@@ -366,7 +396,7 @@ main_menu() {
       elif [[ $has_bin -eq 1 ]]; then
         uninstall_binary
       else
-        warn "未检测到已安装的 NB-Panel"
+        warn "未检测到已安装的 NodePassDash"
       fi
       ;;
     3)
@@ -376,7 +406,7 @@ main_menu() {
       elif [[ -f "$INSTALL_DIR/bin/$BINARY_NAME" ]]; then
         upgrade_binary
       else
-        warn "未检测到已安装的 NB-Panel"
+        warn "未检测到已安装的 NodePassDash"
       fi
       ;;
     4) show_status ;;
