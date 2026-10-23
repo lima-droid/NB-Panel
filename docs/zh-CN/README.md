@@ -55,7 +55,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scri
 bash <(curl -fsSL https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scripts/install.sh)
 ```
 
-安装脚本支持二进制（systemd）和 Docker 两种方式，会自动下载对应架构的发布包并校验 SHA256。
+二进制（systemd）方式拉取上游 **NodePassDash** 官方发布包（静态编译，自动匹配架构），Docker 方式使用本仓库镜像；下载的安装包会校验 SHA256。
 
 ### Docker
 
@@ -121,12 +121,12 @@ docker run -d --name nbpanel --restart=always -p 4000:4000 \
 
 ### 二进制安装
 
-- 🐧 **Linux**（需要 `systemd` 和 glibc，如 Debian / Ubuntu / CentOS）
+- 🐧 **Linux**（需要 `systemd`，如 Debian / Ubuntu / CentOS）
 - 🖥️ **x86_64** / **arm64** / **armv7** / **armv6**
 - 👑 **root** 权限
 - 📡 **curl** 或 **wget**
 
-> Alpine 等 musl 系统请使用 Docker 安装。
+> 上游二进制为静态编译；Alpine 等非 systemd 系统请使用 Docker 安装。
 
 ### Docker 安装
 

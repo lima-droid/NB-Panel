@@ -55,8 +55,9 @@ bash <(wget -qO- https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scri
 bash <(curl -fsSL https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scripts/install.sh)
 ```
 
-The installer supports both a systemd binary deployment and Docker. It downloads the
-matching release asset for your architecture and verifies its SHA256 checksum.
+The systemd binary installation pulls the official upstream **NodePassDash** release
+(statically linked, matching your architecture); Docker uses this repository's image.
+Downloaded archives are verified against the release SHA256 checksums.
 
 ### Docker
 
@@ -122,12 +123,13 @@ Run the installer without arguments for the interactive menu.
 
 ### Binary installation
 
-- 🐧 **Linux** with `systemd` and glibc (Debian / Ubuntu / CentOS and derivatives)
+- 🐧 **Linux** with `systemd` (Debian / Ubuntu / CentOS and derivatives)
 - 🖥️ **x86_64**, **arm64**, **armv7**, or **armv6**
 - 👑 **root** for installation
 - 📡 **curl** or **wget**
 
-Alpine and other musl-based systems should use the Docker installation.
+The upstream binary is statically linked. Alpine and other non-systemd systems should
+use the Docker installation.
 
 ### Docker installation
 

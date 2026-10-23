@@ -6,9 +6,11 @@
 set -Eeuo pipefail
 umask 022
 
-REPO="lima-droid/NB-Panel"
+# 二进制安装跟随上游 NodePassDash 官方发布
+REPO="NodePassProject/NodePassDash"
+ASSET_PREFIX="NodePassDash"
 # GitHub API 不可用时使用的回退版本
-VERSION="v3.4.4"
+VERSION="v4.0.8"
 
 INSTALL_DIR="/opt/nodepassdash"
 BINARY_NAME="nodepassdash"
@@ -180,11 +182,11 @@ download_binary() {
   [[ -n "$WORKDIR" ]] || WORKDIR=$(mktemp -d)
 
   base="https://github.com/${REPO}/releases/download/${VERSION}"
-  asset="NB-Panel_${asset_arch}.tar.gz"
-  sums_name="NB-Panel_${VERSION#v}_checksums.txt"
+  asset="${ASSET_PREFIX}_${asset_arch}.tar.gz"
+  sums_name="${ASSET_PREFIX}_${VERSION#v}_checksums.txt"
   ARCHIVE="$WORKDIR/nbpanel.tar.gz"
 
-  msg "下载 NB-Panel ${VERSION} (${asset_arch})..."
+  msg "下载 NodePassDash ${VERSION} (${asset_arch})..."
   download_file "${base}/${asset}" "$ARCHIVE" || err "下载失败: ${base}/${asset}"
   [[ -s "$ARCHIVE" ]] || err "下载文件为空"
 
@@ -211,7 +213,7 @@ extract_binary() {
   local rc=0
   "$binary" --version >/dev/null 2>&1 || rc=$?
   if [[ "$rc" -eq 126 || "$rc" -eq 127 ]]; then
-    err "二进制无法在当前系统运行（需要 glibc；Alpine 请使用 Docker 安装）"
+    err "二进制无法在当前系统运行（架构不匹配或文件损坏）"
   fi
 
   printf '%s' "$binary"
