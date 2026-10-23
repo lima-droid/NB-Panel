@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../nb-panel-logo.svg" alt="NB面板" height="80">
+  <img src="../nb-panel-logo.png" alt="NB面板" height="80">
   <h1>NB-Panel</h1>
   <p><strong>轻量级隧道管理面板 · 单二进制 · 开箱即用</strong></p>
   <p>
@@ -12,7 +12,6 @@
     <a href="https://github.com/lima-droid/NB-Panel/blob/main/LICENSE">
       <img src="https://img.shields.io/github/license/lima-droid/NB-Panel?style=flat-square&label=许可&color=success" alt="License">
     </a>
-    <img src="https://img.shields.io/badge/构建-passing-ff69b4?style=flat-square" alt="Build">
     <a href="https://github.com/lima-droid/NB-Panel">
       <img src="https://img.shields.io/github/last-commit/lima-droid/NB-Panel?style=flat-square&label=更新&color=blueviolet" alt="Last Commit">
     </a>
@@ -52,7 +51,11 @@ NB面板 是一个轻量级隧道管理面板，**Go 后端 + React 前端 + SQL
 
 ```bash
 bash <(wget -qO- https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scripts/install.sh)
+# 或仅安装了 curl 时：
+bash <(curl -fsSL https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scripts/install.sh)
 ```
+
+安装脚本支持二进制（systemd）和 Docker 两种方式，会自动下载对应架构的发布包并校验 SHA256。
 
 ### Docker
 
@@ -60,9 +63,30 @@ bash <(wget -qO- https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scri
 docker run -d --name nbpanel -p 4000:4000 ghcr.io/lima-droid/nb-panel:latest
 ```
 
-### 手动安装
+持久化数据可挂载 `/app/db`、`/app/logs`、`/app/public`，例如：
 
-`scripts/install.sh` 同时支持二进制（systemd）和 Docker 部署。
+```bash
+docker run -d --name nbpanel --restart=always -p 4000:4000 \
+  -v /opt/nbpanel-data/db:/app/db \
+  -v /opt/nbpanel-data/logs:/app/logs \
+  -v /opt/nbpanel-data/public:/app/public \
+  ghcr.io/lima-droid/nb-panel:latest
+```
+
+### 安装脚本参数
+
+| 参数 | 说明 |
+|------|------|
+| `-b, --binary` | 二进制安装（systemd） |
+| `-d, --docker` | Docker 安装 |
+| `-u, --upgrade` | 升级已安装的版本 |
+| `-r, --remove` | 卸载二进制版 |
+| `-R, --remove-docker` | 卸载 Docker 版 |
+| `-s, --status` | 查看状态 |
+| `-l, --logs` | 查看日志 |
+| `-h, --help` | 显示帮助 |
+
+无参数运行进入交互菜单。
 
 ---
 
@@ -88,14 +112,25 @@ docker run -d --name nbpanel -p 4000:4000 ghcr.io/lima-droid/nb-panel:latest
 | **用户名** | `nbpanel` |
 | **密码** | `Np123456` |
 
-> 密码可通过环境变量 `NB_PANEL_ADMIN_PASSWORD` 覆盖。
+> ⚠️ 首次登录后请立即修改默认密码；忘记密码可运行 `nodepassdash --resetpwd`。
+> 二进制安装默认创建名为 `nodepassdash` 的 systemd 服务，Docker 安装默认创建名为 `nbpanel` 的容器。
 
 ---
 
 ## 📋 系统要求
 
-- 🐧 **Linux / macOS**
-- 🐳 **Docker**（可选）
+### 二进制安装
+
+- 🐧 **Linux**（需要 `systemd` 和 glibc，如 Debian / Ubuntu / CentOS）
+- 🖥️ **x86_64** / **arm64** / **armv7** / **armv6**
+- 👑 **root** 权限
+- 📡 **curl** 或 **wget**
+
+> Alpine 等 musl 系统请使用 Docker 安装。
+
+### Docker 安装
+
+- 🐳 **Docker**（守护进程运行中，支持多架构镜像）
 
 ---
 

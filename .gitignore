@@ -41,3 +41,7 @@ node_modules/
 
 
 
+
+# 发布包产物（请使用 GitHub Releases）
+scripts/*.tar.gz
+scripts/*.zip
