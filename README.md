@@ -55,9 +55,10 @@ bash <(wget -qO- https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scri
 bash <(curl -fsSL https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scripts/install.sh)
 ```
 
-The systemd binary installation pulls the official upstream **NodePassDash** release
-(statically linked, matching your architecture); Docker uses this repository's image.
-Downloaded archives are verified against the release SHA256 checksums.
+The systemd binary installation resolves and pulls the **latest** official upstream
+**NodePassDash** release at runtime (statically linked, matching your architecture);
+Docker uses this repository's image. Downloaded archives are verified against the
+release SHA256 checksums.
 
 ### Docker
 

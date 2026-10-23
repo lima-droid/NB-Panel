@@ -55,7 +55,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scri
 bash <(curl -fsSL https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scripts/install.sh)
 ```
 
-二进制（systemd）方式拉取上游 **NodePassDash** 官方发布包（静态编译，自动匹配架构），Docker 方式使用本仓库镜像；下载的安装包会校验 SHA256。
+二进制（systemd）方式在运行时获取并拉取上游 **NodePassDash** 最新官方发布包（静态编译，自动匹配架构），Docker 方式使用本仓库镜像；下载的安装包会校验 SHA256。
 
 ### Docker
 

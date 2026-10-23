@@ -9,8 +9,8 @@ umask 022
 # 二进制安装跟随上游 NodePassDash 官方发布
 REPO="NodePassProject/NodePassDash"
 ASSET_PREFIX="NodePassDash"
-# GitHub API 不可用时使用的回退版本
-VERSION="v4.0.8"
+# 运行时从 GitHub 获取最新版本，不在脚本中写死
+VERSION=""
 
 INSTALL_DIR="/opt/nodepassdash"
 BINARY_NAME="nodepassdash"
@@ -148,11 +148,12 @@ get_latest_version() {
 
   if [[ -n "$tag" ]]; then
     VERSION="$tag"
+    [[ "$VERSION" == v* ]] || VERSION="v${VERSION}"
+    msg "目标版本: ${VERSION}"
   else
-    warn "获取最新版本失败，使用内置版本 ${VERSION}"
+    VERSION=""
+    warn "无法获取上游版本号，将直接从 releases/latest 下载最新版"
   fi
-  [[ "$VERSION" == v* ]] || VERSION="v${VERSION}"
-  msg "目标版本: ${VERSION}"
 }
 
 verify_sha256() {
@@ -177,23 +178,33 @@ verify_sha256() {
 }
 
 download_binary() {
-  local asset_arch base asset sums_name
+  local asset_arch base asset sums_name release_path
   asset_arch=$(detect_arch)
   [[ -n "$WORKDIR" ]] || WORKDIR=$(mktemp -d)
 
-  base="https://github.com/${REPO}/releases/download/${VERSION}"
+  if [[ -n "$VERSION" ]]; then
+    release_path="releases/download/${VERSION}"
+  else
+    # 拿不到版本号时使用 latest/download 别名，始终下载上游最新版
+    release_path="releases/latest/download"
+  fi
+  base="https://github.com/${REPO}/${release_path}"
   asset="${ASSET_PREFIX}_${asset_arch}.tar.gz"
-  sums_name="${ASSET_PREFIX}_${VERSION#v}_checksums.txt"
   ARCHIVE="$WORKDIR/nbpanel.tar.gz"
 
-  msg "下载 NodePassDash ${VERSION} (${asset_arch})..."
+  msg "下载 NodePassDash ${VERSION:-latest} (${asset_arch})..."
   download_file "${base}/${asset}" "$ARCHIVE" || err "下载失败: ${base}/${asset}"
   [[ -s "$ARCHIVE" ]] || err "下载文件为空"
 
-  if download_file "${base}/${sums_name}" "$WORKDIR/checksums.txt" 2>/dev/null; then
-    verify_sha256 "$ARCHIVE" "$asset"
+  if [[ -n "$VERSION" ]]; then
+    sums_name="${ASSET_PREFIX}_${VERSION#v}_checksums.txt"
+    if download_file "${base}/${sums_name}" "$WORKDIR/checksums.txt" 2>/dev/null; then
+      verify_sha256 "$ARCHIVE" "$asset"
+    else
+      warn "未获取到校验文件，跳过 SHA256 校验"
+    fi
   else
-    warn "未获取到校验文件，跳过 SHA256 校验"
+    warn "未获取到版本号，跳过 SHA256 校验"
   fi
 
   tar -tzf "$ARCHIVE" >/dev/null 2>&1 || err "安装包损坏或格式不正确"
