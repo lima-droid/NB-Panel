@@ -358,9 +358,9 @@ EOF
   sep
   echo -e " ${G}安装完成${N}"
   sep
-  echo -e "   路径:    ${INSTALL_DIR}/bin/${BINARY_NAME}"
-  echo -e "   配置:    ${INSTALL_DIR}/config.env"
   echo -e "   URL:     ${C}${proto}://${ip_addr}:${dest_port}${N}"
+  echo -e "   配置:    ${INSTALL_DIR}/config.env"
+  echo -e "   路径:    ${INSTALL_DIR}/bin/${BINARY_NAME}"
   echo -e "   ${Y}首次打开面板时请设置管理员账户${N}"
   sep
   echo
