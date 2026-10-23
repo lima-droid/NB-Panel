@@ -1,64 +1,61 @@
 <div align="center">
   <img src="docs/nb-panel-logo.png" alt="NB-Panel" height="100">
   <h1>NB-Panel</h1>
-  <p><strong>Lightweight tunnel management panel · single binary · ready to use</strong></p>
+  <p><strong>轻量级隧道管理面板 · 单二进制 · 开箱即用</strong></p>
   <p>
     <a href="https://github.com/lima-droid/NB-Panel/releases">
-      <img src="https://img.shields.io/github/v/release/lima-droid/NB-Panel?style=flat-square&label=Version&color=2496ed" alt="Release">
+      <img src="https://img.shields.io/github/v/release/lima-droid/NB-Panel?style=flat-square&label=版本&color=2496ed" alt="Release">
     </a>
     <a href="https://github.com/lima-droid/NB-Panel">
-      <img src="https://img.shields.io/github/stars/lima-droid/NB-Panel?style=flat-square&label=Stars&color=ffc107" alt="Stars">
+      <img src="https://img.shields.io/github/stars/lima-droid/NB-Panel?style=flat-square&label=星标&color=ffc107" alt="Stars">
     </a>
     <a href="https://github.com/lima-droid/NB-Panel/blob/main/LICENSE">
-      <img src="https://img.shields.io/github/license/lima-droid/NB-Panel?style=flat-square&label=License&color=success" alt="License">
+      <img src="https://img.shields.io/github/license/lima-droid/NB-Panel?style=flat-square&label=许可&color=success" alt="License">
     </a>
     <a href="https://github.com/lima-droid/NB-Panel">
-      <img src="https://img.shields.io/github/last-commit/lima-droid/NB-Panel?style=flat-square&label=Updated&color=blueviolet" alt="Last Commit">
+      <img src="https://img.shields.io/github/last-commit/lima-droid/NB-Panel?style=flat-square&label=更新&color=blueviolet" alt="Last Commit">
     </a>
     <a href="https://t.me/NBPanel">
       <img src="https://img.shields.io/badge/Telegram-NBPanel-26A5E4?style=flat-square&logo=telegram" alt="Telegram">
     </a>
   </p>
   <p>
-    <b>English</b> · <a href="docs/zh-CN/README.md">简体中文</a>
+    <b>简体中文</b>
   </p>
 </div>
 
 ---
 
-NB-Panel is a lightweight tunnel management panel built with a **Go backend, React frontend, and SQLite storage**. It ships as a single binary and works out of the box.
+NB面板 是一个轻量级隧道管理面板，**Go 后端 + React 前端 + SQLite 存储**，单二进制文件部署，开箱即用。
 
-## ✨ Features
+## ✨ 功能一览
 
-| Feature | Description |
-|---------|-------------|
-| 🎯 **Endpoint management** | Manage all NP masters in one place, with batch actions, sorting, and search |
-| 🌉 **Tunnel management** | Create and edit tunnels visually, with protocol and scenario templates |
-| 📊 **Live monitoring** | Tunnel status, traffic, and logs pushed over SSE/WebSocket |
-| 📈 **Traffic charts** | Hourly, daily, and weekly traffic trends |
-| 🔐 **OAuth2 login** | Cloudflare OAuth2 support; password login can be disabled |
-| 🌍 **Multi-language** | Built-in English and Simplified Chinese UI |
-| 📱 **Mobile friendly** | Responsive layout, QR-code import for the mobile app |
-| 🛠️ **Ops toolbox** | Log viewer, network debugging, and system status charts |
+| 功能 | 说明 |
+|------|------|
+| 🎯 **端点管理** | 统一管理所有 NP主控端，支持批量操作、排序、搜索 |
+| 🌉 **隧道管理** | 可视化创建和编辑隧道，支持多种协议和场景模板 |
+| 📊 **实时监控** | SSE/WebSocket 推送隧道状态、流量、日志 |
+| 📈 **流量图表** | 小时/日/周多维度流量趋势 |
+| 🔐 **OAuth2 登录** | 支持 Cloudflare OAuth2，可关闭密码登录 |
+| 🌍 **多语言** | 内置中英文界面 |
+| 📱 **移动端友好** | 响应式布局，支持二维码导入移动端 App |
+| 🛠️ **运维工具** | 日志查看器、网络调试、系统状态图表 |
 
-> [Full changelog →](https://github.com/lima-droid/NB-Panel/releases)
+> [完整更新日志 →](https://github.com/lima-droid/NB-Panel/releases)
 
 ---
 
-## 🚀 Quick start
+## 🚀 快速开始
 
-### Linux one-liner
+### Linux 一键安装
 
 ```bash
 bash <(wget -qO- https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scripts/install.sh)
-# or, if only curl is available:
+# 或仅安装了 curl 时：
 bash <(curl -fsSL https://raw.githubusercontent.com/lima-droid/NB-Panel/main/scripts/install.sh)
 ```
 
-The systemd binary installation resolves and pulls the **latest** official upstream
-**NodePassDash** release at runtime (statically linked, matching your architecture);
-Docker uses this repository's image. Downloaded archives are verified against the
-release SHA256 checksums.
+二进制（systemd）方式在运行时获取并拉取上游 **NodePassDash** 最新官方发布包（静态编译，自动匹配架构），Docker 方式使用本仓库镜像；下载的安装包会校验 SHA256。
 
 ### Docker
 
@@ -66,7 +63,7 @@ release SHA256 checksums.
 docker run -d --name nbpanel -p 4000:4000 ghcr.io/lima-droid/nb-panel:latest
 ```
 
-Persist data by mounting `/app/db`, `/app/logs`, and `/app/public`, for example:
+持久化数据可挂载 `/app/db`、`/app/logs`、`/app/public`，例如：
 
 ```bash
 docker run -d --name nbpanel --restart=always -p 4000:4000 \
@@ -76,80 +73,83 @@ docker run -d --name nbpanel --restart=always -p 4000:4000 \
   ghcr.io/lima-droid/nb-panel:latest
 ```
 
-### Installer options
+### 安装脚本参数
 
-| Option | Description |
-|--------|-------------|
-| `-b, --binary` | Install as a systemd service |
-| `-d, --docker` | Install with Docker |
-| `-u, --upgrade` | Upgrade the detected installation |
-| `-r, --remove` | Uninstall the binary installation |
-| `-R, --remove-docker` | Uninstall the Docker installation |
-| `-s, --status` | Show installation status |
-| `-l, --logs` | Show recent logs |
-| `-h, --help` | Show help |
+| 参数 | 说明 |
+|------|------|
+| `-b, --binary` | 二进制安装（systemd） |
+| `-d, --docker` | Docker 安装 |
+| `-u, --upgrade` | 升级已安装的版本 |
+| `-r, --remove` | 卸载二进制版 |
+| `-R, --remove-docker` | 卸载 Docker 版 |
+| `-s, --status` | 查看状态 |
+| `-l, --logs` | 查看日志 |
+| `-h, --help` | 显示帮助 |
 
-Run the installer without arguments for the interactive menu.
-
----
-
-## ⚙️ CLI arguments
-
-| Argument | Description |
-|----------|-------------|
-| `--help` | ❓ Help |
-| `--version` | ℹ️ Version |
-| `--port 8080` | 🔌 Listen port (default `4000`) |
-| `--log-level INFO` | 📝 Log level |
-| `--cert / --key` | 🔒 TLS certificate and key |
-| `--disable-login` | 🚫 Disable login |
-| `--sse-debug-log` | 🐛 SSE debug logging |
-| `--resetpwd` | 🔑 Reset the admin password |
+无参数运行进入交互菜单。
 
 ---
 
-## 🔑 Default login
+## ⚙️ CLI 参数
+
+| 参数 | 说明 |
+|------|------|
+| `--help` | ❓ 帮助 |
+| `--version` | ℹ️ 版本 |
+| `--port 8080` | 🔌 端口（默认 4000） |
+| `--log-level INFO` | 📝 日志级别 |
+| `--cert / --key` | 🔒 TLS 证书 |
+| `--disable-login` | 🚫 关闭登录 |
+| `--sse-debug-log` | 🐛 SSE 调试日志 |
+| `--resetpwd` | 🔑 重置密码 |
+
+---
+
+## 🔑 默认登录
 
 | | |
 |---|---|
-| **Username** | `nbpanel` |
-| **Password** | `Np123456` |
+| **用户名** | `nbpanel` |
+| **密码** | `Np123456` |
 
-> ⚠️ Change the default password immediately after the first login.
-> The installer creates a systemd service named `nodepassdash`, or a Docker container named `nbpanel`.
-
----
-
-## 📋 Requirements
-
-### Binary installation
-
-- 🐧 **Linux** with `systemd` (Debian / Ubuntu / CentOS and derivatives)
-- 🖥️ **x86_64**, **arm64**, **armv7**, or **armv6**
-- 👑 **root** for installation
-- 📡 **curl** or **wget**
-
-The upstream binary is statically linked. Alpine and other non-systemd systems should
-use the Docker installation.
-
-### Docker installation
-
-- 🐳 **Docker** with the daemon running (multi-arch image)
+> ⚠️ 首次登录后请立即修改默认密码；忘记密码可运行 `nodepassdash --resetpwd`。
+> 二进制安装默认创建名为 `nodepassdash` 的 systemd 服务，Docker 安装默认创建名为 `nbpanel` 的容器。
 
 ---
 
-## 📝 License
+## 📋 系统要求
 
-BSD-3-Clause · See [LICENSE](LICENSE)
+### 二进制安装
 
-## ⚠️ Disclaimer
+- 🐧 **Linux**（需要 `systemd`，如 Debian / Ubuntu / CentOS）
+- 🖥️ **x86_64** / **arm64** / **armv7** / **armv6**
+- 👑 **root** 权限
+- 📡 **curl** 或 **wget**
 
-This project is provided "as is", without warranty of any kind, express or implied.
-Users are responsible for complying with local laws and using it only for lawful purposes.
-The author is not liable for any direct, indirect, incidental, or consequential damages.
+> 上游二进制为静态编译；Alpine 等非 systemd 系统请使用 Docker 安装。
+
+### Docker 安装
+
+- 🐳 **Docker**（守护进程运行中，支持多架构镜像）
 
 ---
 
-## ⭐ Stargazers
+## 📝 许可
+
+BSD-3-Clause · 详见 [LICENSE](LICENSE)
+
+## ⚠️ 免责声明
+
+本项目按"现状"提供，不含任何明示或暗示的担保。使用者须遵守当地法律法规并仅用于合法目的。作者不对任何直接、间接、偶发或后果性损害承担责任。
+
+## 📬 联系方式
+
+- [GitHub Issues](https://github.com/lima-droid/NB-Panel/issues)
+- [Telegram 群组](https://t.me/NBPanel)
+- [@CubeMihomo](https://t.me/CubeMihomo)
+
+---
+
+## ⭐ Star 历史
 
 [![Stargazers](https://img.shields.io/github/stars/lima-droid/NB-Panel?style=for-the-badge&logo=github&color=gold)](https://github.com/lima-droid/NB-Panel)
