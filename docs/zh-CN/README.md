@@ -105,14 +105,11 @@ docker run -d --name nbpanel --restart=always -p 4000:4000 \
 
 ---
 
-## 🔑 默认登录
+## 🔑 首次登录
 
-| | |
-|---|---|
-| **用户名** | `nbpanel` |
-| **密码** | `Np123456` |
+首次打开面板时，页面会引导设置管理员账户和密码；安装脚本不会预设或输出账号密码。
 
-> ⚠️ 首次登录后请立即修改默认密码；忘记密码可运行 `nodepassdash --resetpwd`。
+> 忘记密码可运行 `nodepassdash --resetpwd`。
 > 二进制安装默认创建名为 `nodepassdash` 的 systemd 服务，Docker 安装默认创建名为 `nbpanel` 的容器。
 
 ---
